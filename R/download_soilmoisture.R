@@ -1,6 +1,6 @@
 #' @title Download, Clean and Generate Graphs From USQ Theta Probe Data
 #'
-#'@description This function automates downloading and cleaning data from the
+#'@description This package automates downloading and cleaning data from the
 #'University of Southern Queensland National Centre for Engineering in
 #'Agriculture (NCEA).
 #'
@@ -9,19 +9,15 @@
 #' @param userid The login provided by NCEA to login via FTP
 #' @param password The password provided by NCEA to login via FTP
 #'
-#' @details This function downloads all CSV
+#' @details This function will download all the .csv files from the server and
+#' coallate them into one dataframe, save a .csv file to disk and visualise
+#' the data.
 #'
 #' @examples
-#' # Download data for years 2009 and 2010 and generate yearly summary files,
-#' # GSOD_TP2009_XY and GSOD_TP2010_XY files in folders 2009 and 2010 of your
-#' # working directory with a maximum of five missing days per weather station
-#' # allowed.
 #'
-#' get_GSOD(start_year = 2009, end_year = 2010, max_missing = 5, country)
-#'
-ftp_soilmoisture <- function(userid = "", password  = "") {
+ftp_soil_moisture <- function(userid = "", password  = "") {
   ftp_site <- paste("ftp://", userid, ":",
-                    password, "@ftp.usqsoilmoisture.com/public_html/data/",
+                    password, "@ftp.usqsoil_moisture.com/public_html/data/",
                     sep = "")
 
   filenames <- RCurl::getURL(ftp_site, ftp.use.epsv = FALSE, ftplistonly = TRUE,
