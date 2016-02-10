@@ -1,4 +1,4 @@
-#' @title Download, Clean and Generate Graphs From USQ Neutron Probe Data
+#' @title Download, Clean and Generate Graphs From USQ Theta Probe Data
 #'
 #'@description This function automates downloading and cleaning data from the
 #'University of Southern Queensland National Centre for Engineering in
