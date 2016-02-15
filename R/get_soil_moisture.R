@@ -72,8 +72,6 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
   }
 
   names(soil_moisture) <- c("Date", "Time", "%_Moisture", "Sensor")
-  # insert 5min to daily conversion here
-  return(soil_moisture)
   readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
                                          "_Soil_Moisture.csv"))
 }
