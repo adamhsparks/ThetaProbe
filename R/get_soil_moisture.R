@@ -57,23 +57,21 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
 
       soil_moisture <- rbind(soil_moisture_JW_01[, c(1:3, 13)],
                              soil_moisture_JW_02[, c(1:3, 13)])
+      names(soil_moisture) <- c("Date", "Time", "Moisture", "Sensor")
+      readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
+                                             "_Soil_Moisture.csv"))
 
-    } else {
-
-      sm_JW_01 <- plyr::ldply(JW_01, readr::read_csv, col_names = FALSE)
-      sm_JW_01$Sensor <- rep("JW_01", length(sm_JW_01[, 1]))
-      sm_JW_02 <- plyr::ldply(JW_02, readr::read_csv, col_names = FALSE)
-      sm_JW_02$Sensor <- rep("JW_02", length(sm_JW_02[, 1]))
-
-      sm <- rbind(sm_JW_01[, c(1:3, 13)], sm_JW_02[, c(1:3, 13)])
-
-      soil_moisture <- rbind(soil_moisture, sm)
     }
-  }
 
-  names(soil_moisture) <- c("Date", "Time", "%_Moisture", "Sensor")
-  readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
-                                         "_Soil_Moisture.csv"))
+    sm_JW_01 <- plyr::ldply(JW_01, readr::read_csv, col_names = FALSE)
+    sm_JW_01$Sensor <- rep("JW_01", length(sm_JW_01[, 1]))
+    sm_JW_02 <- plyr::ldply(JW_02, readr::read_csv, col_names = FALSE)
+    sm_JW_02$Sensor <- rep("JW_02", length(sm_JW_02[, 1]))
+
+    sm <- rbind(sm_JW_01[, c(1:3, 13)], sm_JW_02[, c(1:3, 13)])
+    readr::write_csv(sm, paste0(path, "/", Sys.Date(), "_Soil_Moisture.csv"),
+                     append = TRUE)
+  }
 }
 
 # shamelessly borrowed from RJ Hijmans Raster package
