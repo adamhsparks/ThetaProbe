@@ -39,13 +39,12 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
 
     include <- grep("*.csv", subdirectory_filenames)
     csv_files <- subdirectory_filenames[include]
+    include_JW_01 <- grep(".JW_01.", csv_files)
+    JW_01 <- csv_files[include_JW_01]
+    include_JW_02 <- grep(".JW_02.", csv_files)
+    JW_02 <- csv_files[include_JW_02]
 
     if(i == 3){
-      include_JW_01 <- grep(".JW_01.", csv_files)
-      JW_01 <- csv_files[include_JW_01]
-      include_JW_02 <- grep(".JW_02.", csv_files)
-      JW_02 <- csv_files[include_JW_02]
-
       soil_moisture_JW_01 <- plyr::ldply(JW_01, readr::read_csv,
                                          col_names = FALSE)
       soil_moisture_JW_01$Sensor <- rep("JW_01",
@@ -60,7 +59,6 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
       names(soil_moisture) <- c("Date", "Time", "Moisture", "Sensor")
       readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
                                              "_Soil_Moisture.csv"))
-
     }
 
     sm_JW_01 <- plyr::ldply(JW_01, readr::read_csv, col_names = FALSE)
