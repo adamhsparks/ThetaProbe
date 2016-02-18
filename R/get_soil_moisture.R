@@ -71,6 +71,7 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
     sm <- rbind(sm_JW_01[, c(1:3, 13)], sm_JW_02[, c(1:3, 13)])
     readr::write_csv(sm, paste0(path, "/", Sys.Date(), "_Soil_Moisture.csv"),
                      append = TRUE)
+    i <- i + 1
   }
 }
 
