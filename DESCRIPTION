@@ -12,8 +12,13 @@ Depends:
     R (>= 3.0.0)
 License: GPL (>= 3)
 Imports:
+    plyr,
+    readr,
+    stringr,
+    lubridate,
     readr,
     data.table,
     raster,
-    RCurl
+    RCurl,
+    tidyr
 RoxygenNote: 5.0.1
