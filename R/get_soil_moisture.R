@@ -34,16 +34,18 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
                      sep = "")[-c(1:2)]
 
   for(i in 1:length(filenames)){
+    # this step retrieves filesize to check for valid files
     y <- RCurl::getURL(paste0(filenames[i], "/"), ftp.use.epsv = FALSE)
     y <- strsplit(subdirectory_filenames, "\r\n")
     y <- plyr::ldply(y, data.frame)[-c(1:2), ]
-    zz <- as.data.frame(y) %>% separate(y, into = paste("v", 1:21, sep = "_"))
+    zz <- as.data.frame(y) %>% separate(y, into = paste("c", 1:21, sep = "_"))
     zz <- zz[, c(8, 21)]
-    zz <- subset(zz, v_21 == "csv" & v_8 > 0)
+    zz <- subset(zz, v_21 == "csv" & c_8 > 0)
 
+    # this step retrieves the list of all the files for rbindlist to fetch
     subdirectory_filenames <- RCurl::getURL(paste0(filenames[i], "/"),
-                                            ftp.use.epsv = FALSE, ftplistonly = TRUE,
-                                            crlf = TRUE)
+                                            ftp.use.epsv = FALSE,
+                                            ftplistonly = TRUE, crlf = TRUE)
     subdirectory_filenames <- paste(filenames[i], "/",
                                     strsplit(subdirectory_filenames,
                                              "\r*\n")[[1]], sep = "")
@@ -51,7 +53,7 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
 
     include_csv <- grep("*-Sensors.csv", subdirectory_filenames)
     csv_files <- subdirectory_filenames[include_csv]
-    csv_files <- csv_files %in% zz
+    csv_files <- csv_files %in% zz # Only take csv files that have a filesize > 0
 
     include_JW_01 <- grep(".JW_01.", csv_files)
     JW_01 <- append(JW_01, csv_files[include_JW_01])
