@@ -41,7 +41,7 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
                                     strsplit(subdirectory_filenames,
                                              "\r*\n")[[1]], sep = "")
 
-    include <- grep("*.csv", subdirectory_filenames)
+    include <- grep("*-Sensors.csv", subdirectory_filenames)
     csv_files <- subdirectory_filenames[include]
     include_JW_01 <- grep(".JW_01.", csv_files)
     JW_01 <- append(JW_01, csv_files[include_JW_01])
@@ -64,6 +64,11 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
 
     readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
                                            "_Soil_Moisture.csv"), append = TRUE)
+
+    rm(list = c("include", "csv_files", "subdirectory_filenames",
+                "soil_moisture_JW_01", "soil_moisture_JW_02", "soil_moisture"))
+    JW_01 <- NULL
+    JW_02 <- NULL
   }
 
 }
