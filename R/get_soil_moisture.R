@@ -20,6 +20,9 @@
 get_soil_moisture <- function(userid = "", password  = "", path = "") {
 
   path <- .get_data_path(path)
+  JW_01 <- NULL
+  JW_02 <- NULL
+
 
   ftp_site <- paste("ftp://", userid, ":",
                     password, "@ftp.usqsoilmoisture.com/public_html/data/",
@@ -27,51 +30,63 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
 
   filenames <- RCurl::getURL(ftp_site, ftp.use.epsv = FALSE, ftplistonly = TRUE,
                              crlf = TRUE)
-  filenames <- paste(ftp_site, strsplit(filenames, "\r*\n")[[1]], sep = "")
+  filenames <- paste(ftp_site, strsplit(filenames, "\r*\n")[[1]],
+                     sep = "")[-c(1:2)]
 
-  for(i in 3:length(filenames)){
+  for(i in 1:length(filenames)){
+    y <- RCurl::getURL(paste0(filenames[i], "/"), ftp.use.epsv = FALSE)
+    y <- strsplit(subdirectory_filenames, "\r\n")
+    y <- plyr::ldply(y, data.frame)[-c(1:2), ]
+    zz <- as.data.frame(y) %>% separate(y, into = paste("v", 1:21, sep = "_"))
+    zz <- zz[, c(8, 21)]
+    zz <- subset(zz, v_21 == "csv" & v_8 > 0)
+
     subdirectory_filenames <- RCurl::getURL(paste0(filenames[i], "/"),
-                                            ftp.use.epsv = FALSE,
-                                            ftplistonly = TRUE, crlf = TRUE)
+                                            ftp.use.epsv = FALSE, ftplistonly = TRUE,
+                                            crlf = TRUE)
     subdirectory_filenames <- paste(filenames[i], "/",
                                     strsplit(subdirectory_filenames,
                                              "\r*\n")[[1]], sep = "")
 
-    include <- grep("*.csv", subdirectory_filenames)
-    csv_files <- subdirectory_filenames[include]
+
+    include_csv <- grep("*-Sensors.csv", subdirectory_filenames)
+    csv_files <- subdirectory_filenames[include_csv]
+    csv_files <- csv_files %in% zz
+
     include_JW_01 <- grep(".JW_01.", csv_files)
-    JW_01 <- csv_files[include_JW_01]
+    JW_01 <- append(JW_01, csv_files[include_JW_01])
+
     include_JW_02 <- grep(".JW_02.", csv_files)
-    JW_02 <- csv_files[include_JW_02]
+    JW_02 <- append(JW_02, csv_files[include_JW_02])
 
-    if(i == 3){
-      soil_moisture_JW_01 <- plyr::ldply(JW_01, readr::read_csv,
-                                         col_names = FALSE)
-      soil_moisture_JW_01$Sensor <- rep("JW_01",
-                                        length(soil_moisture_JW_01[, 1]))
-      soil_moisture_JW_02 <- plyr::ldply(JW_02, readr::read_csv,
-                                         col_names = FALSE)
-      soil_moisture_JW_02$Sensor <- rep("JW_02",
-                                        length(soil_moisture_JW_02[, 1]))
 
-      soil_moisture <- rbind(soil_moisture_JW_01[, c(1:3, 13)],
-                             soil_moisture_JW_02[, c(1:3, 13)])
-      names(soil_moisture) <- c("Date", "Time", "Moisture", "Sensor")
-      readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
-                                             "_Soil_Moisture.csv"))
-    }
+    soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01, data.table::fread,
+                                                        header = FALSE,
+                                                        select = c(1:3)))
+    soil_moisture_JW_01$Sensor <- rep("JW_01",
+                                      length(soil_moisture_JW_01[, 1]))
+    soil_moisture_JW_02 <- data.table::rbindlist(lapply(JW_02, data.table::fread,
+                                                        header = FALSE,
+                                                        select = c(1:3)))
+    soil_moisture_JW_02$Sensor <- rep("JW_02",
+                                      length(soil_moisture_JW_02[, 1]))
+    soil_moisture <- rbind(soil_moisture_JW_01, soil_moisture_JW_02)
+    names(soil_moisture) <- c("Date", "Time", "Moisture", "Sensor")
 
-    sm_JW_01 <- plyr::ldply(JW_01, readr::read_csv, col_names = FALSE)
-    sm_JW_01$Sensor <- rep("JW_01", length(sm_JW_01[, 1]))
-    sm_JW_02 <- plyr::ldply(JW_02, readr::read_csv, col_names = FALSE)
-    sm_JW_02$Sensor <- rep("JW_02", length(sm_JW_02[, 1]))
 
-    sm <- rbind(sm_JW_01[, c(1:3, 13)], sm_JW_02[, c(1:3, 13)])
-    readr::write_csv(sm, paste0(path, "/", Sys.Date(), "_Soil_Moisture.csv"),
-                     append = TRUE)
-    i <- i + 1
+    readr::write_csv(soil_moisture, paste0(path, "/",
+                                           "USQ_Soil_Moisture.csv"), append = TRUE)
+
+    rm(list = c("include", "csv_files", "subdirectory_filenames",
+                "soil_moisture_JW_01", "soil_moisture_JW_02", "soil_moisture"))
+
+    JW_01 <- NULL
+    JW_02 <- NULL
   }
+
+
 }
+
 
 # shamelessly borrowed from RJ Hijmans Raster package
 .get_data_path <- function(path) {

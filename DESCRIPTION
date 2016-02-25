@@ -16,6 +16,9 @@ Imports:
     readr,
     stringr,
     lubridate,
+    readr,
+    data.table,
     raster,
-    RCurl
+    RCurl,
+    tidyr
 RoxygenNote: 5.0.1
