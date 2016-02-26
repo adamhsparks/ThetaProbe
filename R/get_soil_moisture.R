@@ -35,32 +35,18 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
 
   for(i in 1:length(filenames)){
     # this step retrieves filesize to check for valid files
-    y <- RCurl::getURL(paste0(filenames[i], "/"), ftp.use.epsv = FALSE)
-    y <- strsplit(subdirectory_filenames, "\r\n")
-    y <- plyr::ldply(y, data.frame)[-c(1:2), ]
-    zz <- as.data.frame(y) %>% separate(y, into = paste("c", 1:21, sep = "_"))
-    zz <- zz[, c(8, 21)]
-    zz <- subset(zz, v_21 == "csv" & c_8 > 0)
-
-    # this step retrieves the list of all the files for rbindlist to fetch
-    subdirectory_filenames <- RCurl::getURL(paste0(filenames[i], "/"),
-                                            ftp.use.epsv = FALSE,
-                                            ftplistonly = TRUE, crlf = TRUE)
-    subdirectory_filenames <- paste(filenames[i], "/",
-                                    strsplit(subdirectory_filenames,
-                                             "\r*\n")[[1]], sep = "")
-
-
-    include_csv <- grep("*-Sensors.csv", subdirectory_filenames)
-    csv_files <- subdirectory_filenames[include_csv]
-    csv_files <- csv_files %in% zz # Only take csv files that have a filesize > 0
+    y <- readr::read_table(RCurl::getURL(paste0(filenames[i], "/"),
+                                         ftp.use.epsv = FALSE),
+                           col_names = FALSE, skip = 2)
+    y <- y[grep("-Sensors.csv", y$X9), ]
+    y <- subset(y, X5 > 0)
+    csv_files <- paste0(filenames[i], y[, 9])
 
     include_JW_01 <- grep(".JW_01.", csv_files)
     JW_01 <- append(JW_01, csv_files[include_JW_01])
 
     include_JW_02 <- grep(".JW_02.", csv_files)
     JW_02 <- append(JW_02, csv_files[include_JW_02])
-
 
     soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01, data.table::fread,
                                                         header = FALSE,
@@ -84,10 +70,7 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
         JW_01 <- NULL
     JW_02 <- NULL
   }
-
-
 }
-
 
 # shamelessly borrowed from RJ Hijmans Raster package
 .get_data_path <- function(path) {
