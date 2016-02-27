@@ -34,13 +34,12 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
                      sep = "")[-c(1:2)]
 
   for(i in 1:length(filenames)){
-    # this step retrieves filesize to check for valid files
     y <- readr::read_table(RCurl::getURL(paste0(filenames[i], "/"),
                                          ftp.use.epsv = FALSE),
                            col_names = FALSE, skip = 2)
     y <- y[grep("-Sensors.csv", y$X9), ]
     y <- subset(y, X5 > 0)
-    csv_files <- paste0(filenames[i], y[, 9])
+    csv_files <- paste0(filenames[i], "/", y[, 9])
 
     include_JW_01 <- grep(".JW_01.", csv_files)
     JW_01 <- append(JW_01, csv_files[include_JW_01])
@@ -48,11 +47,12 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
     include_JW_02 <- grep(".JW_02.", csv_files)
     JW_02 <- append(JW_02, csv_files[include_JW_02])
 
-    soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01, data.table::fread,
+    soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01, readr::read_table,
                                                         header = FALSE,
                                                         select = c(1:3)))
     soil_moisture_JW_01$Sensor <- rep("JW_01",
                                       length(soil_moisture_JW_01[, 1]))
+
     soil_moisture_JW_02 <- data.table::rbindlist(lapply(JW_02, data.table::fread,
                                                         header = FALSE,
                                                         select = c(1:3)))
@@ -61,13 +61,13 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
     soil_moisture <- rbind(soil_moisture_JW_01, soil_moisture_JW_02)
     names(soil_moisture) <- c("Date", "Time", "Moisture", "Sensor")
 
-        readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
+    readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
                                            "_Soil_Moisture.csv"), append = TRUE)
 
     rm(list = c("include", "csv_files", "subdirectory_filenames",
                 "soil_moisture_JW_01", "soil_moisture_JW_02", "soil_moisture"))
 
-        JW_01 <- NULL
+    JW_01 <- NULL
     JW_02 <- NULL
   }
 }
