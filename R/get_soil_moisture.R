@@ -47,7 +47,7 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
     include_JW_02 <- grep(".JW_02.", csv_files)
     JW_02 <- append(JW_02, csv_files[include_JW_02])
 
-    soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01, readr::read_table,
+    soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01, data.table::fread,
                                                         header = FALSE,
                                                         select = c(1:3)))
     soil_moisture_JW_01$Sensor <- rep("JW_01",
