@@ -24,7 +24,6 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
   JW_01 <- NULL
   JW_02 <- NULL
   X5 <- NULL
-  X9 <- NULL
 
   ftp_site <- paste("ftp://", userid, ":",
                     password, "@ftp.usqsoilmoisture.com/public_html/data/",
@@ -68,9 +67,8 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
     readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
                                            "_Soil_Moisture.csv"), append = TRUE)
 
-    rm(list = c("include", "csv_files", "subdirectory_filenames",
+    rm(list = c("include_JW_01", "include_JW_02", "csv_files",
                 "soil_moisture_JW_01", "soil_moisture_JW_02", "soil_moisture"))
-
     JW_01 <- NULL
     JW_02 <- NULL
   }
@@ -100,4 +98,3 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
   }
   return(path)
 }
-
