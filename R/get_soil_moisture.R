@@ -33,7 +33,7 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
   filenames <- paste(ftp_site, strsplit(filenames, "\r*\n")[[1]],
                      sep = "")[-c(1:2)]
 
-  for(i in 1:length(filenames)){
+  for (i in seq_len(length(filenames))) {
     y <- readr::read_table(RCurl::getURL(paste0(filenames[i], "/"),
                                          ftp.use.epsv = FALSE),
                            col_names = FALSE, skip = 2)
@@ -47,13 +47,15 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
     include_JW_02 <- grep(".JW_02.", csv_files)
     JW_02 <- append(JW_02, csv_files[include_JW_02])
 
-    soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01, data.table::fread,
+    soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01,
+                                                        data.table::fread,
                                                         header = FALSE,
                                                         select = c(1:3)))
     soil_moisture_JW_01$Sensor <- rep("JW_01",
                                       length(soil_moisture_JW_01[, 1]))
 
-    soil_moisture_JW_02 <- data.table::rbindlist(lapply(JW_02, data.table::fread,
+    soil_moisture_JW_02 <- data.table::rbindlist(lapply(JW_02,
+                                                        data.table::fread,
                                                         header = FALSE,
                                                         select = c(1:3)))
     soil_moisture_JW_02$Sensor <- rep("JW_02",
@@ -78,7 +80,7 @@ get_soil_moisture <- function(userid = "", password  = "", path = "") {
   if (path == "") {
     path <- getwd()
   } else {
-    if (substr(path, nchar(path)-1, nchar(path)) == "//") {
+    if (substr(path, nchar(path) - 1, nchar(path)) == "//") {
       p <- substr(path, 1, nchar(path) - 2)
     } else if (substr(path, nchar(path), nchar(path)) == "/" |
                substr(path, nchar(path), nchar(path)) == "\\") {
