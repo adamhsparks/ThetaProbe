@@ -16,13 +16,15 @@
 #' to disk.
 #'
 #' @examples
-#'
+#' # NULL
+#' @export
 get_soil_moisture <- function(userid = "", password  = "", path = "") {
 
   path <- .get_data_path(path)
   JW_01 <- NULL
   JW_02 <- NULL
-
+  X5 <- NULL
+  X9 <- NULL
 
   ftp_site <- paste("ftp://", userid, ":",
                     password, "@ftp.usqsoilmoisture.com/public_html/data/",

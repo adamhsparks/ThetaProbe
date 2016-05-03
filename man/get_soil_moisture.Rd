@@ -27,6 +27,6 @@ coallate them into one dataframe named "soil_moisture" and saves a .csv file
 to disk.
 }
 \examples{
-
+# NULL
 }
 
