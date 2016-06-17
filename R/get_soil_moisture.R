@@ -24,8 +24,8 @@
 #' @examples
 #' # NULL
 #' @export
-get_soil_moisture <- function(userid = "NULL", password = "NULL", path = "NULL",
-                              local_files = "NULL") {
+get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
+                              local_files = NULL) {
 
   if (is.null(userid)) {
     stop("You must enter a user id to login to the server")
