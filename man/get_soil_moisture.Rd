@@ -4,8 +4,8 @@
 \alias{get_soil_moisture}
 \title{Download, Clean and Generate Graphs From USQ Theta Probe Data}
 \usage{
-get_soil_moisture(userid = "NULL", password = "NULL", path = "NULL",
-  local_files = "NULL")
+get_soil_moisture(userid = NULL, password = NULL, path = NULL,
+  local_files = NULL)
 }
 \arguments{
 \item{userid}{The login provided by NCEA to login via file transfer protocol
@@ -17,7 +17,7 @@ get_soil_moisture(userid = "NULL", password = "NULL", path = "NULL",
 output. Defaults to current working directory.}
 
 \item{local_files}{Filepath to directory, which holds previous data logger
-data files.}
+data monthly file folders, which contain hourly CSV files from loggers.}
 }
 \description{
 This package automates downloading and cleaning data from the

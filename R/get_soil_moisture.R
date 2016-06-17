@@ -13,7 +13,7 @@
 #' @param path Filepath to directory for saving a comma separated file (CSV)
 #' output. Defaults to current working directory.
 #' @param local_files Filepath to directory, which holds previous data logger
-#' data files.
+#' data monthly file folders, which contain hourly CSV files from loggers.
 #'
 #' @details This function will download CSV files from the server that
 #' are not currently on the local machine in the user specified location and
@@ -40,10 +40,11 @@ get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
   }
 
   path <- .get_data_path(path)
+  local_files <- .get_data_path(local_files)
   JW_01 <- NULL
   JW_02 <- NULL
 
-  local_files <- list.files(local_files)
+  local_dirs <- list.dirs(path = local_files)
 
   ftp_site <- paste("ftp://", userid, ":",
                     password, "@ftp.usqsoilmoisture.com/public_html/data/",
@@ -53,7 +54,7 @@ get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
   filenames <- paste(ftp_site, strsplit(filenames, "\r*\n")[[1]],
                      sep = "")[-c(1:2)]
 
-  filenames <- filenames[filenames %in% local_files == FALSE, ]
+  filenames <- filenames[filenames %in% local_dirs == FALSE, ]
 
   for (i in seq_len(length(filenames))) {
     csv_files <- list.files(filenames, pattern = ".csv$", full.names = TRUE)
