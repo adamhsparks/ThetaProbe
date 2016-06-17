@@ -4,27 +4,35 @@
 \alias{get_soil_moisture}
 \title{Download, Clean and Generate Graphs From USQ Theta Probe Data}
 \usage{
-get_soil_moisture(userid = "", password = "", path = "")
+get_soil_moisture(userid = "NULL", password = "NULL", path = "NULL",
+  local_files = "NULL")
 }
 \arguments{
-\item{userid}{The login provided by NCEA to login via FTP}
+\item{userid}{The login provided by NCEA to login via file transfer protocol
+(FTP)}
 
 \item{password}{The password provided by NCEA to login via FTP}
 
-\item{path}{Filepath to directory for saving .csv file output. Defaults to
-current working directory.}
+\item{path}{Filepath to directory for saving a comma separated file (CSV)
+output. Defaults to current working directory.}
+
+\item{local_files}{Filepath to directory, which holds previous data logger
+data files.}
 }
 \description{
 This package automates downloading and cleaning data from the
 University of Southern Queensland National Centre for Engineering in
 Agriculture (NCEA).
 
-This is a slow process to retrieve all the files from the server.
+This is a slow process to retrieve all the files from the server for the first
+run. After the first run, it will be much faster to only retrieve new files.
 }
 \details{
-This function will download all the .csv files from the server and
-coallate them into one dataframe named "soil_moisture" and saves a .csv file
-to disk.
+This function will download CSV files from the server that
+are not currently on the local machine in the user specified location and
+coallate them into one dataframe named "soil_moisture" and saves a CSV file
+to disk. If there are no existing data files locally, the function will
+attempt to retrieve all files from the server.
 }
 \examples{
 # NULL
