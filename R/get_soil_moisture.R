@@ -55,47 +55,47 @@ get_soil_moisture <- function(userid = "NULL", password = "NULL", path = "NULL",
 
   filenames <- filenames[filenames %in% local_files == FALSE, ]
 
-for (i in seq_len(length(filenames))) {
-  csv_files <- list.files(filenames, pattern = ".csv$", full.names = TRUE)
+  for (i in seq_len(length(filenames))) {
+    csv_files <- list.files(filenames, pattern = ".csv$", full.names = TRUE)
 
 
-  include_JW_01 <- grep("JW_01.", csv_files)
-  JW_01 <- append(JW_01, csv_files[include_JW_01])
+    include_JW_01 <- grep("JW_01.", csv_files)
+    JW_01 <- append(JW_01, csv_files[include_JW_01])
 
-  include_JW_02 <- grep("JW_02.", csv_files)
-  JW_02 <- append(JW_02, csv_files[include_JW_02])
+    include_JW_02 <- grep("JW_02.", csv_files)
+    JW_02 <- append(JW_02, csv_files[include_JW_02])
 
-  soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01,
-                                                      data.table::fread,
-                                                      header = FALSE,
-                                                      select = c(1:3)))
-  soil_moisture_JW_01$Sensor <- rep("JW_01",
-                                    length(soil_moisture_JW_01[, 1]))
+    soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01,
+                                                        data.table::fread,
+                                                        header = FALSE,
+                                                        select = c(1:3)))
+    soil_moisture_JW_01$Sensor <- rep("JW_01",
+                                      length(soil_moisture_JW_01[, 1]))
 
-  soil_moisture_JW_02 <- data.table::rbindlist(lapply(JW_02,
-                                                      data.table::fread,
-                                                      header = FALSE,
-                                                      select = c(1:3)))
-  soil_moisture_JW_02$Sensor <- rep("JW_02",
-                                    length(soil_moisture_JW_02[, 1]))
-  soil_moisture <- rbind(soil_moisture_JW_01, soil_moisture_JW_02)
-  names(soil_moisture) <- c("Date", "Time", "Moisture", "Sensor")
+    soil_moisture_JW_02 <- data.table::rbindlist(lapply(JW_02,
+                                                        data.table::fread,
+                                                        header = FALSE,
+                                                        select = c(1:3)))
+    soil_moisture_JW_02$Sensor <- rep("JW_02",
+                                      length(soil_moisture_JW_02[, 1]))
+    soil_moisture <- rbind(soil_moisture_JW_01, soil_moisture_JW_02)
+    names(soil_moisture) <- c("Date", "Time", "Moisture", "Sensor")
 
-  readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
-                                         "_Soil_Moisture.csv"), append = TRUE)
+    readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
+                                           "_Soil_Moisture.csv"), append = TRUE)
 
-  rm(list = c("include_JW_01", "include_JW_02", "csv_files",
-              "soil_moisture_JW_01", "soil_moisture_JW_02", "soil_moisture",
-              "local_files"))
-  JW_01 <- NULL
-  JW_02 <- NULL
-}
+    rm(list = c("include_JW_01", "include_JW_02", "csv_files",
+                "soil_moisture_JW_01", "soil_moisture_JW_02", "soil_moisture",
+                "local_files"))
+    JW_01 <- NULL
+    JW_02 <- NULL
+  }
 }
 
 # shamelessly borrowed from RJ Hijmans Raster package
 .get_data_path <- function(path) {
   path <- raster::trim(path)
-  if (path == "") {
+  if (is.null(path)) {
     path <- getwd()
   } else {
     if (substr(path, nchar(path) - 1, nchar(path)) == "//") {
