@@ -46,13 +46,11 @@ get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
 
   local_dirs <- list.dirs(path = local_files)
 
-  ftp_site <- paste("ftp://", userid, ":",
-                    password, "@ftp.usqsoilmoisture.com/public_html/data/",
-                    sep = "")
+  ftp_site <- paste0("ftp://", userid, ":",
+                    password, "@ftp.usqsoilmoisture.com/public_html/data/")
   filenames <- RCurl::getURL(ftp_site, ftp.use.epsv = FALSE, ftplistonly = TRUE,
                              crlf = TRUE)
-  filenames <- paste(ftp_site, strsplit(filenames, "\r*\n")[[1]],
-                     sep = "")[-c(1:2)]
+  filenames <- paste0(ftp_site, strsplit(filenames, "\r*\n")[[1]])[-c(1:2)]
 
   filenames <- filenames[filenames %in% local_dirs == FALSE, ]
 
