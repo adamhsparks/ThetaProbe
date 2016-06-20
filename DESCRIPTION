@@ -14,8 +14,12 @@ Depends:
     R (>= 3.0.0)
 License: GPL (>= 3)
 Imports:
-    readr,
     data.table,
+    doBy,
+    ggplot2,
+    pracma,
     raster,
-    RCurl
+    readr,
+    RCurl,
+    scales
 RoxygenNote: 5.0.1
