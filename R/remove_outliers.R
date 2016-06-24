@@ -17,15 +17,15 @@
 #' # NULL
 #' @export
 
-remove_outliers <- function(csv) {
+remove_outliers <- function(csv = NULL, path = NULL) {
 soil <- readr::read_csv(csv)
 
 
 soil$Filtered_Moisture <- pracma::hampel(soil[, 3], 4, t0 = 3)$y
 
-doBy::summaryb
+doBy::summaryBy
 
-write.csv(soil, path = paste0(path, "/"), row.names = FALSE)
+utils::write.csv(soil, path = paste0(path, "/"), row.names = FALSE)
 
 }
 
