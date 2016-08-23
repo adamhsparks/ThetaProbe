@@ -12,7 +12,7 @@
 #' @param password The password provided by NCEA to login via FTP
 #' @param path Filepath to directory for saving a comma separated file (CSV)
 #' output. Defaults to current working directory.
-#' @param local_files Filepath to directory, which holds previous data logger
+#' @param local_dirs Filepath to directory, which holds previous data logger
 #' data monthly file folders, which contain hourly CSV files from loggers.
 #'
 #' @details This function will download CSV files from the server that
@@ -25,7 +25,7 @@
 #' # NULL
 #' @export
 get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
-                              local_files = NULL) {
+                              local_dirs = NULL) {
 
   if (is.null(userid)) {
     stop("You must enter a user id to login to the server")
@@ -33,30 +33,51 @@ get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
   if (is.null(password)) {
     stop("You must enter a password to login to the server")
   }
-  if (is.null(local_files)) {
+  if (is.null(local_dirs)) {
     readline(prompt = "You have not specified a location for local data files.
              R will attempt to download all data files from ftp.usqsoilmoisture.com.
              If this is correct, please press [enter] to continue")
   }
 
   path <- .get_data_path(path)
-  local_files <- .get_data_path(local_files)
+  local_dirs <- .get_data_path(local_dirs)
 
   JW_01 <- NULL
   JW_02 <- NULL
 
-  local_dirs <- list.files(path = local_files)
+  # get full list of local directories
+  local_dirs <- list.dirs(path = local_dirs)
+
+  # what is the most up to date directory that exists (month)?
+  latest_dir <- max(local_dirs)
+  # what files for that month are present locally?
+  latest_files <- list.files(latest_dir, pattern = ".csv$")
+
+  # take only the directory name, not full path
+  latest_dir <- substr(latest_dir, 44, 49)
 
   ftp_site <- paste0("ftp://", userid, ":",
-
                     password, "@ftp.usqsoilmoisture.com/public_html/data/")
-  filenames <- RCurl::getURL(ftp_site, ftp.use.epsv = FALSE, ftplistonly = TRUE,
+  remote_dirs <- RCurl::getURL(ftp_site, ftp.use.epsv = FALSE, ftplistonly = TRUE,
                              crlf = TRUE)
-  filenames <- paste0(ftp_site, strsplit(filenames, "\r*\n")[[1]])[-c(1:2)]
+  remote_dirs <- paste0(ftp_site, strsplit(remote_dirs, "\r*\n")[[1]])[-c(1:2)]
 
+  # take only directory names, not full path
+  remote_dirs <- substr(remote_dirs, 68, 73)
 
-  for (i in seq_len(length(filenames))) {
-    csv_files <- list.files(filenames, pattern = ".csv$", full.names = TRUE)
+  # which directories do not exist locally?
+  remote_dirs <- remote_dirs[remote_dirs %in% local_dirs == FALSE]
+
+  # add the latest local directory, it may not have complete data
+  remote_dirs <- c(latest_dir, remote_dirs)
+
+  for (i in seq_len(length(remote_dirs))) {
+    remote <- paste(ftp_site, remote_dirs[i], sep = "")
+    csv_files <- list.files(remote, pattern = ".csv$", full.names = TRUE)
+
+    if (i == 1) {
+      csv_files <- csv_files[csv_files %in% latest_files]
+    }
 
     include_JW_01 <- grep("JW_01.", csv_files)
     JW_01 <- append(JW_01, csv_files[include_JW_01])
@@ -85,7 +106,7 @@ get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
 
     rm(list = c("include_JW_01", "include_JW_02", "csv_files",
                 "soil_moisture_JW_01", "soil_moisture_JW_02", "soil_moisture",
-                "local_files"))
+                "local_dirs"))
     JW_01 <- NULL
     JW_02 <- NULL
   }
