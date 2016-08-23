@@ -48,6 +48,7 @@ get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
   # get full list of local directories
   local_dirs <- list.dirs(path = local_dirs)
 
+
   # what is the most up to date directory that exists (month)?
   latest_dir <- max(local_dirs)
   # what files for that month are present locally?
