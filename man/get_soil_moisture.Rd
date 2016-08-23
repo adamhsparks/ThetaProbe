@@ -5,7 +5,7 @@
 \title{Download, Clean and Generate Graphs From USQ Theta Probe Data}
 \usage{
 get_soil_moisture(userid = NULL, password = NULL, path = NULL,
-  local_files = NULL)
+  local_dirs = NULL)
 }
 \arguments{
 \item{userid}{The login provided by NCEA to login via file transfer protocol
@@ -16,7 +16,7 @@ get_soil_moisture(userid = NULL, password = NULL, path = NULL,
 \item{path}{Filepath to directory for saving a comma separated file (CSV)
 output. Defaults to current working directory.}
 
-\item{local_files}{Filepath to directory, which holds previous data logger
+\item{local_dirs}{Filepath to directory, which holds previous data logger
 data monthly file folders, which contain hourly CSV files from loggers.}
 }
 \description{
