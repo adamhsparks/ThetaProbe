@@ -42,14 +42,13 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
   JW_02 <- NULL
 
   # get full list of local directories
-  local_dirs <- list.dirs(path = local_dirs)
-  local_dirs <- substr(local_dirs, 45, 50)[-1]
-
+  local_dirs <- list.dirs(path = local_dirs)[-1]
+  local_dirs <- substr(local_dirs, nchar(local_dirs) - 5, nchar(local_dirs))
 
   # what is the most up to date directory that exists (month)?
   latest_dir <- max(local_dirs)
   # what files for that month are present locally?
-  latest_files <- list.files(latest_dir, pattern = ".csv$")
+  latest_files <- list.files(paste0(path, latest_dir))
 
   ftp_site <- paste0("ftp://", userpwd, "@ftp.usqsoilmoisture.com/public_html/data/")
   remote_dirs <- RCurl::getURL(ftp_site, ftp.use.epsv = FALSE, ftplistonly = TRUE,
@@ -65,7 +64,7 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
   # add the latest local directory, it may not have complete data
   remote_dirs <- c(latest_dir, remote_dirs)
 
-  for (m in remote_dirs) {
+  for (m in seq_len(length(remote_dirs))) {
     if (dir.exists(paste0(path, remote_dirs[m])) == FALSE) {
       dir.create(file.path(path, remote_dirs[m]))
     }
@@ -96,14 +95,14 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
     JW_01_files <- lapply(JW_01_files, data.frame, stringsAsFactors = FALSE)
     JW_02_files <- lapply(JW_02_files, data.frame, stringsAsFactors = FALSE)
 
-    for (k in 1:length(JW_01_files)) {
+    for (k in 1:seq_along(length(JW_01_files))) {
       files_out <- lapply(JW_01_files[[k]], function(x) utils::read.csv(text = x, header = FALSE))
-      utils::write.csv(files_out, file = paste0(path, remote_dirs[i], "/", JW_01[[k]]))
+      readr::write_csv(files_out, file = paste0(path, remote_dirs[i], "/", JW_01[[k]]))
     }
 
-    for (i in 1:length(JW_02_files)) {
+    for (i in 1:seq_along(length(JW_02_files))) {
       files_out <- lapply(JW_02_files[[k]], function(x) utils::read.csv(text = x, header = FALSE))
-      utils::write.csv(files_out, file = paste0(path, remote_dirs[i], "/", JW_02[[k]]))
+      readr::write_csv(files_out, file = paste0(path, remote_dirs[i], "/", JW_02[[k]]))
     }
 
     JW_01 <- list.files(paste0(path, remote_dirs[i]),
@@ -158,10 +157,6 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
     if (!file.exists(p) & !file.exists(path)) {
       stop("File path does not exist: ", path)
     }
-  }
-  if (substr(path, nchar(path), nchar(path)) != "/" &
-      substr(path, nchar(path), nchar(path)) != "\\") {
-    path <- paste0(path, "/")
   }
   return(path)
 }
