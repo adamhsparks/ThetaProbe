@@ -67,6 +67,12 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
   # add the latest local directory, it may not have complete data
   remote_dirs <- c(latest_dir, remote_dirs)
 
+  for (m in remote_dirs) {
+    if (dir.exists(paste0(path, remote_dirs[m])) == FALSE) {
+      dir.create(file.path(path, remote_dirs[m]))
+    }
+  }
+
   for (i in seq_len(length(remote_dirs))) {
     remote <- paste(ftp_site, remote_dirs[i], "/", sep = "")
     csv_files <- RCurl::getURL(remote, ftp.use.epsv = FALSE, ftplistonly = TRUE,
@@ -83,10 +89,6 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
 
     include_JW_02 <- grep("JW_02.", csv_files)
     JW_02 <- append(JW_02, csv_files[include_JW_02])
-
-    if (dir.exists(paste0(path, remote_dirs[i])) == FALSE) {
-      dir.create(file.path(path, remote_dirs[i]))
-    }
 
     con <- RCurl::getCurlHandle(ftp.use.epsv = FALSE)
     JW_01_files <- sapply(paste0(remote, JW_01), function(x) try(RCurl::getURL(x, curl = con)))
