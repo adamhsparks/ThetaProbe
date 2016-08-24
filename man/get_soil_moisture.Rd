@@ -27,9 +27,7 @@ run. After the first run, it will be much faster to only retrieve new files.
 \details{
 This function will download CSV files from the server that
 are not currently on the local machine in the user specified location and
-coallate them into one dataframe named "soil_moisture" and saves a CSV file
-to disk. If there are no existing data files locally, the function will
-attempt to retrieve all files from the server.
+coallate them into one CSV file for further use.
 }
 \examples{
 \dontrun{
