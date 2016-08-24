@@ -88,21 +88,21 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
     }
 
     con <- RCurl::getCurlHandle(ftp.use.epsv = FALSE)
-    JW_01 <- sapply(paste0(remote, JW_01), function(x) try(RCurl::getURL(x, curl = con)))
+    JW_01_files <- sapply(paste0(remote, JW_01), function(x) try(RCurl::getURL(x, curl = con)))
 
-    JW_02 <- sapply(paste0(remote, JW_02), function(x) try(RCurl::getURL(x, curl = con)))
+    JW_02_files <- sapply(paste0(remote, JW_02), function(x) try(RCurl::getURL(x, curl = con)))
 
-    JW_01_files <- lapply(JW_01, data.frame, stringsAsFactors = FALSE)
-    JW_02_files <- lapply(JW_02, data.frame, stringsAsFactors = FALSE)
+    JW_01_files <- lapply(JW_01_files, data.frame, stringsAsFactors = FALSE)
+    JW_02_files <- lapply(JW_02_files, data.frame, stringsAsFactors = FALSE)
 
-    for (i in 1:length(JW_01_files)) {
-      files_out <- lapply(JW_01_files[[i]], function(x) utils::read.csv(text = x, header = FALSE))
-      utils::write.csv(files_out, file = paste0(path, remote_dirs[i], "/", names(JW_01[i])))
+    for (k in 1:length(JW_01_files)) {
+      files_out <- lapply(JW_01_files[[k]], function(x) utils::read.csv(text = x, header = FALSE))
+      utils::write.csv(files_out, file = paste0(path, remote_dirs[i], "/", JW_01[[k]]))
     }
 
     for (i in 1:length(JW_02_files)) {
-      files_out <- lapply(JW_02_files[[i]], function(x) utils::read.csv(text = x, header = FALSE))
-      utils::write.csv(files_out, file = paste0(path, remote_dirs[i], "/", names(JW_02[i])))
+      files_out <- lapply(JW_02_files[[k]], function(x) utils::read.csv(text = x, header = FALSE))
+      utils::write.csv(files_out, file = paste0(path, remote_dirs[i], "/", JW_02[[k]]))
     }
 
     JW_01 <- list.files(paste0(path, remote_dirs[i]),
