@@ -7,9 +7,8 @@
 #'This is a slow process to retrieve all the files from the server for the first
 #'run. After the first run, it will be much faster to only retrieve new files.
 #'
-#' @param userid The login provided by NCEA to login via file transfer protocol
-#' (FTP)
-#' @param password The password provided by NCEA to login via FTP
+#' @param userpwd The login and password provided by NCEA to login via file
+#' transfer protocol (FTP)
 #' @param path Filepath to directory for saving a comma separated file (CSV)
 #' output. Defaults to current working directory.
 #' @param local_dirs Filepath to directory, which holds previous data logger
@@ -22,16 +21,15 @@
 #' attempt to retrieve all files from the server.
 #'
 #' @examples
-#' # NULL
+#' \dontrun{
+#' get_soil_moisture(userpwd = "userid:password", path = NULL, local_dirs = NULL)
+#' }
 #' @export
-get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
+get_soil_moisture <- function(userpwd = NULL, path = NULL,
                               local_dirs = NULL) {
 
-  if (is.null(userid)) {
-    stop("You must enter a user id to login to the server")
-  }
-  if (is.null(password)) {
-    stop("You must enter a password to login to the server")
+  if (is.null(userpwd)) {
+    stop("You must enter a user id and password to login to the server")
   }
   if (is.null(local_dirs)) {
     readline(prompt = "You have not specified a location for local data files.
@@ -47,19 +45,16 @@ get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
 
   # get full list of local directories
   local_dirs <- list.dirs(path = local_dirs)
+  local_dirs <- substr(local_dirs, 45, 50)[-1]
 
   # what is the most up to date directory that exists (month)?
   latest_dir <- max(local_dirs)
   # what files for that month are present locally?
   latest_files <- list.files(latest_dir, pattern = ".csv$")
 
-  # take only the directory name, not full path
-  latest_dir <- substr(latest_dir, 44, 49)
-
-  ftp_site <- paste0("ftp://", userid, ":",
-                    password, "@ftp.usqsoilmoisture.com/public_html/data/")
+  ftp_site <- paste0("ftp://", userpwd, "@ftp.usqsoilmoisture.com/public_html/data/")
   remote_dirs <- RCurl::getURL(ftp_site, ftp.use.epsv = FALSE, ftplistonly = TRUE,
-                             crlf = TRUE)
+                               crlf = TRUE, ssl.verifypeer = FALSE)
   remote_dirs <- paste0(ftp_site, strsplit(remote_dirs, "\r*\n")[[1]])[-c(1:2)]
 
   # take only directory names, not full path
@@ -72,11 +67,14 @@ get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
   remote_dirs <- c(latest_dir, remote_dirs)
 
   for (i in seq_len(length(remote_dirs))) {
-    remote <- paste(ftp_site, remote_dirs[i], sep = "")
-    csv_files <- list.files(remote, pattern = ".csv$", full.names = TRUE)
+    remote <- paste(ftp_site, remote_dirs[i], "/", sep = "")
+    csv_files <- RCurl::getURL(remote, ftp.use.epsv = FALSE, ftplistonly = TRUE,
+                               crlf = TRUE, ssl.verifypeer = FALSE)
+    csv_files <- strsplit(csv_files, "\r*\n")[[1]]
+    csv_files <- csv_files[grep(".csv$", csv_files)]
 
     if (i == 1) {
-      csv_files <- csv_files[csv_files %in% latest_files]
+      csv_files <- csv_files[csv_files %in% latest_files == FALSE]
     }
 
     include_JW_01 <- grep("JW_01.", csv_files)
@@ -84,6 +82,35 @@ get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
 
     include_JW_02 <- grep("JW_02.", csv_files)
     JW_02 <- append(JW_02, csv_files[include_JW_02])
+
+    if (dir.exists(paste0(path, remote_dirs[i])) == FALSE) {
+      dir.create(file.path(path, remote_dirs[i]))
+    }
+
+    con <- RCurl::getCurlHandle(ftp.use.epsv = FALSE)
+    JW_01 <- sapply(paste0(remote, JW_01), function(x) try(RCurl::getURL(x, curl = con)))
+
+    JW_02 <- sapply(paste0(remote, JW_02), function(x) try(RCurl::getURL(x, curl = con)))
+
+    JW_01_files <- lapply(JW_01, data.frame, stringsAsFactors = FALSE)
+    JW_02_files <- lapply(JW_02, data.frame, stringsAsFactors = FALSE)
+
+    for (i in 1:length(JW_01_files)) {
+      files_out <- lapply(JW_01_files[[i]], function(x) utils::read.csv(text = x, header = FALSE))
+      utils::write.csv(files_out, file = paste0(path, remote_dirs[i], "/", names(JW_01[i])))
+    }
+
+    for (i in 1:length(JW_02_files)) {
+      files_out <- lapply(JW_02_files[[i]], function(x) utils::read.csv(text = x, header = FALSE))
+      utils::write.csv(files_out, file = paste0(path, remote_dirs[i], "/", names(JW_02[i])))
+    }
+
+    JW_01 <- list.files(paste0(path, remote_dirs[i]),
+                        pattern = "JW_01[[:graph:]]+Sensors.csv",
+                        full.names = TRUE)
+    JW_02 <- list.files(paste0(path, remote_dirs[i]),
+                        pattern = "JW_02[[:graph:]]+Sensors.csv",
+                        full.names = TRUE)
 
     soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01,
                                                         data.table::fread,
@@ -112,9 +139,10 @@ get_soil_moisture <- function(userid = NULL, password = NULL, path = NULL,
   }
 }
 
+#' @noRd
 # shamelessly borrowed from RJ Hijmans Raster package
 .get_data_path <- function(path) {
-  path <- raster::trim(path)
+  path <- trimws(path)
   if (is.null(path)) {
     path <- getwd()
   } else {

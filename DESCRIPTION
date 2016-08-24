@@ -1,7 +1,7 @@
 Package: ThetaProbe
 Type: Package
 Title: Download, Clean and Generate a Single Data File From USQ Theta Probe Soil Moisture Data
-Version: 0.02
+Version: 1.0
 Date: 2016-06-17
 Authors@R: as.person(c(
     "Adam Sparks <adamhsparks@gmail.com> [aut, cre]"
@@ -18,7 +18,6 @@ Imports:
     doBy,
     ggplot2,
     pracma,
-    raster,
     readr,
     RCurl,
     scales,

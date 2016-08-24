@@ -4,19 +4,16 @@
 \alias{get_soil_moisture}
 \title{Download, Clean and Generate Graphs From USQ Theta Probe Data}
 \usage{
-get_soil_moisture(userid = NULL, password = NULL, path = NULL,
-  local_files = NULL)
+get_soil_moisture(userpwd = NULL, path = NULL, local_dirs = NULL)
 }
 \arguments{
-\item{userid}{The login provided by NCEA to login via file transfer protocol
-(FTP)}
-
-\item{password}{The password provided by NCEA to login via FTP}
+\item{userpwd}{The login and password provided by NCEA to login via file
+transfer protocol (FTP)}
 
 \item{path}{Filepath to directory for saving a comma separated file (CSV)
 output. Defaults to current working directory.}
 
-\item{local_files}{Filepath to directory, which holds previous data logger
+\item{local_dirs}{Filepath to directory, which holds previous data logger
 data monthly file folders, which contain hourly CSV files from loggers.}
 }
 \description{
@@ -35,6 +32,8 @@ to disk. If there are no existing data files locally, the function will
 attempt to retrieve all files from the server.
 }
 \examples{
-# NULL
+\dontrun{
+get_soil_moisture(userpwd = "userid:password", path = NULL, local_dirs = NULL)
+}
 }
 
