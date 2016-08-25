@@ -23,8 +23,7 @@
 #' get_soil_moisture(userpwd = "userid:password", path = NULL, local_dirs = NULL)
 #' }
 #' @export
-get_soil_moisture <- function(userpwd = NULL, path = NULL,
-                              local_dirs = NULL) {
+get_soil_moisture <- function(userpwd = NULL, path = NULL, local_dirs = NULL) {
 
   if (is.null(userpwd)) {
     stop("You must enter a user id and password to login to the server")
@@ -38,6 +37,10 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
   path <- .get_data_path(path)
   local_dirs <- .get_data_path(local_dirs)
 
+  if (file.exists(paste0(path, "/", Sys.Date(), "_Soil_Moisture.csv"))) {
+    file.remove(paste0(path, "/", Sys.Date(), "_Soil_Moisture.csv"))
+  }
+
   JW_01 <- NULL
   JW_02 <- NULL
 
@@ -48,7 +51,7 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
   # what is the most up to date directory that exists (month)?
   latest_dir <- max(local_dirs)
   # what files for that month are present locally?
-  latest_files <- list.files(paste0(path, latest_dir))
+  latest_files <- list.files(paste0(path, "/", latest_dir))
 
   ftp_site <- paste0("ftp://", userpwd, "@ftp.usqsoilmoisture.com/public_html/data/")
   remote_dirs <- RCurl::getURL(ftp_site, ftp.use.epsv = FALSE, ftplistonly = TRUE,
@@ -64,18 +67,19 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
   # add the latest local directory, it may not have complete data
   remote_dirs <- c(latest_dir, remote_dirs)
 
-  for (m in seq_len(length(remote_dirs))) {
-    if (dir.exists(paste0(path, remote_dirs[m])) == FALSE) {
-      dir.create(file.path(path, remote_dirs[m]))
+  for (dir in seq_len(length(remote_dirs))) {
+    if (!utils::file_test("-d", paste0(path, "/", remote_dirs[dir]))) {
+      dir.create(file.path(path, "/", remote_dirs[dir]))
     }
   }
 
+  # Loop to download new data files from server --------------------------------
   for (i in seq_len(length(remote_dirs))) {
     remote <- paste(ftp_site, remote_dirs[i], "/", sep = "")
     csv_files <- RCurl::getURL(remote, ftp.use.epsv = FALSE, ftplistonly = TRUE,
                                crlf = TRUE, ssl.verifypeer = FALSE)
     csv_files <- strsplit(csv_files, "\r*\n")[[1]]
-    csv_files <- csv_files[grep(".csv$", csv_files)]
+    csv_files <- csv_files[grep("JW_0[[:graph:]]+Sensors.csv$", csv_files)]
 
     if (i == 1) {
       csv_files <- csv_files[csv_files %in% latest_files == FALSE]
@@ -87,30 +91,51 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
     include_JW_02 <- grep("JW_02.", csv_files)
     JW_02 <- append(JW_02, csv_files[include_JW_02])
 
-    con <- RCurl::getCurlHandle(ftp.use.epsv = FALSE)
-    JW_01_files <- sapply(paste0(remote, JW_01), function(x) try(RCurl::getURL(x, curl = con)))
+    con <- RCurl::getCurlHandle(ftp.use.epsv = FALSE, ssl.verifypeer = FALSE)
 
+    JW_01_files <- sapply(paste0(remote, JW_01), function(x) try(RCurl::getURL(x, curl = con)))
     JW_02_files <- sapply(paste0(remote, JW_02), function(x) try(RCurl::getURL(x, curl = con)))
 
     JW_01_files <- lapply(JW_01_files, data.frame, stringsAsFactors = FALSE)
     JW_02_files <- lapply(JW_02_files, data.frame, stringsAsFactors = FALSE)
 
-    for (k in 1:seq_along(length(JW_01_files))) {
-      files_out <- lapply(JW_01_files[[k]], function(x) utils::read.csv(text = x, header = FALSE))
-      readr::write_csv(files_out, file = paste0(path, remote_dirs[i], "/", JW_01[[k]]))
+    names(JW_01_files) <- JW_01
+    names(JW_02_files) <- JW_02
+
+    for (f in 1:length(JW_01_files)) {
+      readr::write_csv(
+        as.data.frame(
+          lapply(JW_01_files[[f]], function(x) utils::read.csv(text = x, header = FALSE))),
+        path = paste0(path, "/", remote_dirs[i], "/", JW_01[f]), col_names = FALSE)
     }
 
-    for (i in 1:seq_along(length(JW_02_files))) {
-      files_out <- lapply(JW_02_files[[k]], function(x) utils::read.csv(text = x, header = FALSE))
-      readr::write_csv(files_out, file = paste0(path, remote_dirs[i], "/", JW_02[[k]]))
+    for (g in 1:length(JW_02_files)) {
+      readr::write_csv(
+        as.data.frame(
+          lapply(JW_02_files[[g]], function(x) utils::read.csv(text = x, header = FALSE))),
+        path = paste0(path, "/", remote_dirs[i], "/", JW_02[g]), col_names = FALSE)
     }
+  }
 
-    JW_01 <- list.files(paste0(path, remote_dirs[i]),
+  # Loop in local directories after downloading new data files and -------------
+  #  generate new CSV file
+  for (l in 1:length(local_dirs)) {
+    JW_01 <- list.files(paste0(path, "/", local_dirs[l]),
                         pattern = "JW_01[[:graph:]]+Sensors.csv",
                         full.names = TRUE)
-    JW_02 <- list.files(paste0(path, remote_dirs[i]),
+
+    # check file sizes and discard those files with no data
+    info <- file.info(JW_01)
+    empty <- rownames(info[info$size < 40, ])
+    JW_01 <- JW_01[JW_01 %in% empty == FALSE]
+
+    JW_02 <- list.files(paste0(path, "/", local_dirs[l]),
                         pattern = "JW_02[[:graph:]]+Sensors.csv",
                         full.names = TRUE)
+
+    info <- file.info(JW_02)
+    empty <- rownames(info[info$size < 40, ])
+    JW_02 <- JW_02[JW_02 %in% empty == FALSE]
 
     soil_moisture_JW_01 <- data.table::rbindlist(lapply(JW_01,
                                                         data.table::fread,
@@ -125,19 +150,16 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL,
                                                         select = c(1:3)))
     soil_moisture_JW_02$Sensor <- rep("JW_02",
                                       length(soil_moisture_JW_02[, 1]))
+
     soil_moisture <- rbind(soil_moisture_JW_01, soil_moisture_JW_02)
     names(soil_moisture) <- c("Date", "Time", "Moisture", "Sensor")
-
     readr::write_csv(soil_moisture, paste0(path, "/", Sys.Date(),
                                            "_Soil_Moisture.csv"), append = TRUE)
-
-    rm(list = c("include_JW_01", "include_JW_02", "csv_files",
-                "soil_moisture_JW_01", "soil_moisture_JW_02", "soil_moisture",
-                "local_dirs"))
     JW_01 <- NULL
     JW_02 <- NULL
   }
 }
+
 
 #' @noRd
 # shamelessly borrowed from RJ Hijmans Raster package
