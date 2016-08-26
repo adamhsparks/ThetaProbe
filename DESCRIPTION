@@ -15,12 +15,12 @@ Depends:
 License: GPL (>= 3)
 Imports:
     data.table,
+    dplyr,
     doBy,
-    ggplot2,
+    lubridate,
     pracma,
     readr,
     RCurl,
-    scales,
     utils
 RoxygenNote: 5.0.1
 ByteCompile: TRUE

@@ -29,9 +29,11 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL, local_dirs = NULL) {
     stop("You must enter a user id and password to login to the server")
   }
   if (is.null(local_dirs)) {
-    readline(prompt = "You have not specified a location for local data files.
-             R will attempt to download all data files from ftp.usqsoilmoisture.com.
-             If this is correct, please press [enter] to continue")
+    readline(prompt = "\n
+             You have not specified a location for local data files.\n
+             R will attempt to download all data files from ftp.usqsoilmoisture.com.\n
+             If this is correct, please press [enter] to continue.\
+             Otherwise, [esc] will cancel this operation and you may specify the location of local files.\n")
   }
 
   path <- .get_data_path(path)
