@@ -42,6 +42,7 @@ clean_theta_data <- function(csv_in = NULL) {
                       as.character(observations$Probe),
                       data = observations,
                       FUN = mean)
+  aggregated[, 3] <- round(aggregated[, 3], 2)
 
   # arrange by Probe then date and return tibble object ------------------------
   names(aggregated) <- c("Date", "Probe", "Moisture")
