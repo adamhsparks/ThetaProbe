@@ -135,6 +135,7 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL, local_dirs = NULL) {
                         pattern = "JW_02[[:graph:]]+Sensors.csv",
                         full.names = TRUE)
 
+    # check file sizes and discard those files with no data
     info <- file.info(JW_02)
     empty <- rownames(info[info$size < 40, ])
     JW_02 <- JW_02[JW_02 %in% empty == FALSE]
