@@ -121,7 +121,7 @@ get_soil_moisture <- function(userpwd = NULL, path = NULL, local_dirs = NULL) {
 
   # Loop in local directories after downloading new data files and -------------
   #  generate new CSV file
-  for (l in 1:length(local_dirs)) {
+  for (l in seq_len(local_dirs)) {
     JW_01 <- list.files(paste0(path, "/", local_dirs[l]),
                         pattern = "JW_01[[:graph:]]+Sensors.csv",
                         full.names = TRUE)
