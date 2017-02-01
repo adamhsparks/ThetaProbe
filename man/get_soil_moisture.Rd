@@ -34,4 +34,3 @@ coallate them into one CSV file for further use.
 get_soil_moisture(userpwd = "userid:password", path = NULL, local_dirs = NULL)
 }
 }
-

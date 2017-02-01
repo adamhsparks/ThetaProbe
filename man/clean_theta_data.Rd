@@ -29,4 +29,3 @@ path = "~/Documents/Data/Theta Probe/")
 write.csv(cleaned, "~/Documents/cleaned_data.csv")
 }
 }
-

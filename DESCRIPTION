@@ -22,5 +22,5 @@ Imports:
     readr,
     RCurl,
     utils
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.0
 ByteCompile: TRUE
