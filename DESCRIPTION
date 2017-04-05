@@ -2,14 +2,13 @@ Package: ThetaProbe
 Type: Package
 Title: Download, Clean and Generate a Single Data File From USQ Theta Probe Soil Moisture Data
 Version: 1.0.1
-Date: 2016-08-26
 Authors@R: as.person(c(
     "Adam Sparks <adamhsparks@gmail.com> [aut, cre]"
   ))
 Maintainer: Adam H Sparks, <adamhsparks@gmail.com>
 URL: https://github.com/adamhsparks/ThetaProbe
 BugReports: https://github.com/adamhsparks/ThetaProbe/issues
-Description: This package automates downloading and cleaning data from USQ NCEA soil probes for Dr Jo White.
+Description: This package automates downloading and cleaning data from USQ NCEA soil probes for the USQ CCH Summer Crops Pathology group.
 Depends:
     R (>= 3.2.0)
 License: GPL (>= 3)
@@ -22,5 +21,5 @@ Imports:
     readr,
     RCurl,
     utils
-RoxygenNote: 6.0.0
+RoxygenNote: 6.0.1
 ByteCompile: TRUE
