@@ -22,26 +22,30 @@
 #' @export
 
 clean_theta_data <- function(csv_in = NULL) {
-
   Date <- Probe <- Moisture <- NULL
 
   # import data ----------------------------------------------------------------
-  observations <- as.data.frame(
-    readr::read_csv(csv_in, col_names = c("Date", "Time", "Moisture", "Probe")))
+  observations <- na.omit(as.data.frame(readr::read_csv(
+    csv_in, col_names = c("Date", "Time", "Moisture", "Probe")
+  )))
 
   # reformate date column ------------------------------------------------------
-  observations[, 1] <- gsub(pattern = "/", replacement = "", observations[, 1])
+  observations[, 1] <-
+    gsub(pattern = "/", replacement = "", observations[, 1])
   observations[, 1] <- lubridate::dmy(observations[, 1])
 
   # filter ouliers -------------------------------------------------------------
-  observations$Filtered_Moisture <- pracma::hampel(observations[, 3], 4, t0 = 3)$y
+  observations$Filtered_Moisture <-
+    pracma::hampel(observations[, 3], 4, t0 = 3)$y
 
   # aggregate to daily values --------------------------------------------------
-  aggregated <- doBy::summaryBy(Moisture ~
-                      as.Date(observations$Date, origin = "1960-01-01") +
-                      as.character(observations$Probe),
-                      data = observations,
-                      FUN = mean)
+  aggregated <- doBy::summaryBy(
+    Moisture ~
+      as.Date(observations$Date, origin = "1960-01-01") +
+      as.character(observations$Probe),
+    data = observations,
+    FUN = mean
+  )
   aggregated[, 3] <- round(aggregated[, 3], 2)
 
   # arrange by Probe then date and return tibble object ------------------------
@@ -49,6 +53,5 @@ clean_theta_data <- function(csv_in = NULL) {
 
   aggregated <- dplyr::arrange(aggregated, Probe, Date)
 
-return(aggregated)
+  return(aggregated)
 }
-
