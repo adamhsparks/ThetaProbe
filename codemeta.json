@@ -1,0 +1,145 @@
+{
+  "@context": [
+    "https://doi.org/doi:10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
+  "@type": "SoftwareSourceCode",
+  "identifier": "ThetaProbe",
+  "description": "This package automates downloading and cleaning data from USQ NCEA\n    soil probes for the USQ CCH Summer Crops Pathology group.",
+  "name": "ThetaProbe: Download, Clean and Generate a Single Data File From USQ Theta Probe Soil Moisture Data",
+  "codeRepository": "https://github.com/adamhsparks/ThetaProbe.git",
+  "issueTracker": "https://github.com/adamhsparks/ThetaProbe/issues",
+  "license": "https://spdx.org/licenses/GPL-3.0",
+  "version": "1.0.1",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "version": "3.4.1",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 3.4.1 (2017-06-30)",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Adam",
+      "familyName": "Sparks",
+      "email": "adamhsparks@gmail.com",
+      "@id": "https://orcid.org/0000-0002-0061-8359"
+    }
+  ],
+  "maintainer": {
+    "@type": "Person",
+    "givenName": "Adam",
+    "familyName": "Sparks",
+    "email": "adamhsparks@gmail.com",
+    "@id": "https://orcid.org/0000-0002-0061-8359"
+  },
+  "softwareSuggestions": [],
+  "softwareRequirements": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "data.table",
+      "name": "data.table",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "dplyr",
+      "name": "dplyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "doBy",
+      "name": "doBy",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "lubridate",
+      "name": "lubridate",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "pracma",
+      "name": "pracma",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "readr",
+      "name": "readr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "RCurl",
+      "name": "RCurl",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "utils",
+      "name": "utils"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": "3.2.0"
+    }
+  ],
+  "contIntegration": "https://travis-ci.org/adamhsparks/ThetaProbe",
+  "readme": "https://github.com/adamhsparks/ThetaProbe.git/blob/master/README.md",
+  "fileSize": "4.718KB",
+  "citation": [
+    {
+      "@type": "SoftwareSourceCode",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Adam",
+          "familyName": "Sparks"
+        }
+      ],
+      "name": "{ThetaProbe}: Download, Clean and Generate a Single Data File From USQ Theta Probe Soil Moisture Data",
+      "url": "https://github.com/adamhsparks/ThetaProbe"
+    }
+  ]
+}
