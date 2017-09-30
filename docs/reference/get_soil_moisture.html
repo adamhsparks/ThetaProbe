@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Download, Clean and Generate Graphs From USQ Theta Probe Data — get_soil_moisture • ThetaProbe</title>
+<title>Download, Clean and Generate Graphs From USQ ThetaProbe Data — get_soil_moisture • ThetaProbe</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -80,15 +80,14 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Download, Clean and Generate Graphs From USQ Theta Probe Data</h1>
+    <h1>Download, Clean and Generate Graphs From USQ ThetaProbe Data</h1>
     </div>
 
     
-    <p>This package automates downloading and cleaning data from the
-University of Southern Queensland National Centre for Engineering in
-Agriculture (NCEA).</p>
+    <p>This package automates downloading and cleaning of soile moisture
+data from ThetaProbs.</p>
 <p>This is a slow process to retrieve all the files from the server for the first
-run. After the first run, it will be much faster to only retrieve new files.</p>
+run.  After the first run, it will be much faster to only retrieve new files.</p>
     
 
     <pre class="usage"><span class='fu'>get_soil_moisture</span>(<span class='kw'>userpwd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>local_dirs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
@@ -104,7 +103,7 @@ transfer protocol (FTP)</p></td>
     <tr>
       <th>path</th>
       <td><p>Filepath to directory for saving a comma separated file (CSV)
-output. Defaults to current working directory.</p></td>
+output.  Defaults to current working directory.</p></td>
     </tr>
     <tr>
       <th>local_dirs</th>
@@ -117,12 +116,13 @@ data monthly file folders, which contain hourly CSV files from loggers.</p></td>
 
     <p>This function will download CSV files from the server that
 are not currently on the local machine in the user specified location and
-coallate them into one CSV file for further use.</p>
+collate them into one CSV file for further use.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>get_soil_moisture</span>(<span class='kw'>userpwd</span> <span class='kw'>=</span> <span class='st'>"userid:password"</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>local_dirs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>get_soil_moisture</span>(<span class='kw'>userpwd</span> <span class='kw'>=</span> <span class='st'>"userid:password"</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+<span class='kw'>local_dirs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
