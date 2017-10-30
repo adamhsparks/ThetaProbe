@@ -1,0 +1,136 @@
+---
+title: "ThetaProbe"
+author: "Adam H. Sparks"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{ThetaProbe}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# ThetaProbe
+
+An R package for internal use to retrieve files from the University of Southern
+Queensland's NCEA soil probe FTP file server for the Centre for Crop Health's
+Summer Crops Pathology group and collate all files while converting five-minute
+data into daily values and filtering outliers in the five-minute data before
+generating daily mean values for analysis and graphing.
+
+## Load libraries for use in R session
+
+```{r load_libraries, eval=FALSE}
+library(ThetaProbe)
+library(ggplot2)
+library(scales)
+library(readr)
+library(theme.usq)
+```
+
+## Using get_os() to set the filepaths
+
+Check the operating system first to see what platform R is running on. Set the
+output file path appropriately.
+
+```{r check_os, eval=FALSE}
+
+if(get_os == "windows") {
+  file_path <- "J:/Summer\ Pathology/Jo\ White/Theta\ Probe\ Files/"
+} else # macOS, so
+  file_path <-
+  "/Volumes/centreforcrophealth/Summer\ Pathology/Jo\ White/Theta\ Probe\ Files/"
+}
+```
+
+## Using get_soil_moisture() to download new data
+
+This function, `get_soil_moisture()`, downloads data from the FTP server. 
+The theta probe logger files are made up of several disjoint files that this
+function will concatenate with any prior data files available locally to create
+a single master file of the data for cleaning and analysis.
+
+- `userpwd`: provide a valid user name and password to access the FTP server
+
+- `path`: File path to directory for saving a comma separated file (CSV)
+#' output. Defaults to current working directory.
+
+- `local_dirs`: File path to directory, which holds previous data logger data
+monthly file folders, which contain hourly CSV files from theta probe loggers.
+
+```{r download_data, eval=FALSE}
+get_soil_moisture(userpwd = "",
+                  path = "~/Documents/Data/Theta Probe/",
+                  local_dirs = "~/Documents/Data/Theta Probe/")
+
+```
+
+## Using clean_theta_data() to remove outliers in the data 
+
+Use a Hampel filter to remove outliers before summarising five-minute data into
+daily values.
+
+```{r clean_data, eval=FALSE}
+soil <- clean_theta_data(csv_in = paste0(
+  "~/Documents/Data/Theta Probe/",
+  Sys.Date(),
+  "_Soil_Moisture.csv"
+))
+```
+
+## Final formatting and graphing
+
+### Name probes in data file
+
+The soil probes are referred to as "JW_01" and "JW_02" in the logger files. In
+this step we will assign the location names in the final file for analysis.
+
+```{r name_probes, eval=FALSE}
+soil$Probe[soil$Probe == "JW_01"] <- "Hermitage"
+soil$Probe[soil$Probe == "JW_02"] <- "Kingaroy"
+```
+
+### Clean up data
+
+The Hermitage probe was reactivated while in storage and transmitted values.
+This step removes them from the final data.
+
+```{r remove_extra, eval=FALSE}
+soil <-
+  soil[which(soil$Probe != "Hermitage" |
+               soil$Date < "2017-08-15"), ]
+```
+
+## Final steps, graphing and saving data
+
+### Graph data
+
+Create a graph of the data and store it in a shared location. This makes use of
+the [_theme.usq_]("https://github.com/adamhsparks/theme_usq") package to apply USQ colours and typography to the graphic.
+
+```{r graph_data, eval=FALSE}
+theta_graph <-
+  ggplot(soil, aes(x = Date, y = Moisture, colour = Probe)) +
+  geom_line() +
+  scale_colour_manual(values = usq_palette[c(1, 3)]) +
+  ylab("Soil Moisture (%)") +
+  facet_grid(Probe ~ .) +
+  theme_usq() +
+  theme(legend.position = "none")
+
+ggsave(paste0("/Daily_Soil_Moisture_Graph_", Sys.Date(), ".png"),
+       theta_graph,
+       path = file_path)
+
+```
+
+### Save the cleaned master CSV file
+
+Save data to disk in a shared location.
+
+```{r save_final_data, eval=FALSE}
+write_csv(soil,
+          paste0(file_path, "Daily_Soil_Moisture_Data_", Sys.Date(), ".csv"))
+```
+
