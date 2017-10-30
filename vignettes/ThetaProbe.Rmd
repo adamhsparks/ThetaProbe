@@ -11,8 +11,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# ThetaProbe
-
 An R package for internal use to retrieve files from the University of Southern
 Queensland's NCEA soil probe FTP file server for the Centre for Crop Health's
 Summer Crops Pathology group and collate all files while converting five-minute
