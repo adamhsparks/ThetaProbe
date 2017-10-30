@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_soil_moisture.R
 \name{get_soil_moisture}
 \alias{get_soil_moisture}
-\title{Download, Clean and Generate Graphs From USQ Theta Probe Data}
+\title{Download, Clean and Generate Graphs From USQ ThetaProbe Data}
 \usage{
 get_soil_moisture(userpwd = NULL, path = NULL, local_dirs = NULL)
 }
@@ -11,26 +11,26 @@ get_soil_moisture(userpwd = NULL, path = NULL, local_dirs = NULL)
 transfer protocol (FTP)}
 
 \item{path}{Filepath to directory for saving a comma separated file (CSV)
-output. Defaults to current working directory.}
+output.  Defaults to current working directory.}
 
 \item{local_dirs}{Filepath to directory, which holds previous data logger
 data monthly file folders, which contain hourly CSV files from loggers.}
 }
 \description{
-This package automates downloading and cleaning data from the
-University of Southern Queensland National Centre for Engineering in
-Agriculture (NCEA).
+This package automates downloading and cleaning of soile moisture
+data from ThetaProbs.
 
 This is a slow process to retrieve all the files from the server for the first
-run. After the first run, it will be much faster to only retrieve new files.
+run.  After the first run, it will be much faster to only retrieve new files.
 }
 \details{
 This function will download CSV files from the server that
 are not currently on the local machine in the user specified location and
-coallate them into one CSV file for further use.
+collate them into one CSV file for further use.
 }
 \examples{
 \dontrun{
-get_soil_moisture(userpwd = "userid:password", path = NULL, local_dirs = NULL)
+get_soil_moisture(userpwd = "userid:password", path = NULL,
+local_dirs = NULL)
 }
 }

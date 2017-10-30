@@ -1,26 +1,27 @@
-#' @title Download, Clean and Generate Graphs From USQ Theta Probe Data
+
+#' @title Download, Clean and Generate Graphs From USQ ThetaProbe Data
 #'
-#'@description This package automates downloading and cleaning data from the
-#'University of Southern Queensland National Centre for Engineering in
-#'Agriculture (NCEA).
+#'@description This package automates downloading and cleaning of soile moisture
+#' data from ThetaProbs.
 #'
 #'This is a slow process to retrieve all the files from the server for the first
-#'run. After the first run, it will be much faster to only retrieve new files.
+#'run.  After the first run, it will be much faster to only retrieve new files.
 #'
 #' @param userpwd The login and password provided by NCEA to login via file
 #' transfer protocol (FTP)
 #' @param path Filepath to directory for saving a comma separated file (CSV)
-#' output. Defaults to current working directory.
+#' output.  Defaults to current working directory.
 #' @param local_dirs Filepath to directory, which holds previous data logger
 #' data monthly file folders, which contain hourly CSV files from loggers.
 #'
 #' @details This function will download CSV files from the server that
 #' are not currently on the local machine in the user specified location and
-#' coallate them into one CSV file for further use.
+#' collate them into one CSV file for further use.
 #'
 #' @examples
 #' \dontrun{
-#' get_soil_moisture(userpwd = "userid:password", path = NULL, local_dirs = NULL)
+#' get_soil_moisture(userpwd = "userid:password", path = NULL,
+#' local_dirs = NULL)
 #' }
 #' @export
 get_soil_moisture <-
@@ -34,9 +35,11 @@ get_soil_moisture <-
       readline(
         prompt = "\n
         You have not specified a location for local data files.\n
-        R will attempt to download all data files from ftp.usqsoilmoisture.com.\n
-        If this is correct, please press [enter] to continue.\
-        Otherwise, [esc] will cancel this operation and you may specify the location of local files.\n"
+        R will attempt to download all data files from\n
+        ftp.usqsoilmoisture.com.\n
+        If this is correct, please press [enter] to continue.\n
+        Otherwise, [esc] will cancel this operation and you may specify the\n
+        location of local files.\n"
       )
     }
 
@@ -84,14 +87,14 @@ get_soil_moisture <-
     # add the latest local directory, it may not have complete data
     remote_dirs <- c(latest_dir, remote_dirs)
 
-    for (dir in seq_len(length(remote_dirs))) {
+    for (dir in seq_along(remote_dirs)) {
       if (!utils::file_test("-d", paste0(path, "/", remote_dirs[dir]))) {
         dir.create(file.path(path, "/", remote_dirs[dir]))
       }
     }
 
     # Loop to download new data files from server ------------------------------
-    for (i in seq_len(length(remote_dirs))) {
+    for (i in seq_along(remote_dirs)) {
       remote <- paste(ftp_site, remote_dirs[i], "/", sep = "")
       csv_files <-
         RCurl::getURL(
@@ -120,20 +123,26 @@ get_soil_moisture <-
 
       JW_01_files <- sapply(paste0(remote, JW_01),
                             function(x)
-                              try(RCurl::getURL(x, curl = con)))
+                              try(RCurl::getURL(x, curl = con))
+      )
       JW_02_files <- sapply(paste0(remote, JW_02),
                             function(x)
-                              try(RCurl::getURL(x, curl = con)))
+                              try(RCurl::getURL(x, curl = con))
+      )
 
       JW_01_files <-
-        lapply(JW_01_files, data.frame, stringsAsFactors = FALSE)
+        lapply(
+          JW_01_files, data.frame, stringsAsFactors = FALSE
+        )
       JW_02_files <-
-        lapply(JW_02_files, data.frame, stringsAsFactors = FALSE)
+        lapply(
+          JW_02_files, data.frame, stringsAsFactors = FALSE
+        )
 
       names(JW_01_files) <- JW_01
       names(JW_02_files) <- JW_02
 
-      for (f in 1:length(JW_01_files)) {
+      for (f in seq_len(JW_01_files)) {
         readr::write_csv(
           as.data.frame(lapply(JW_01_files[[f]],
                                function(x)
@@ -144,7 +153,7 @@ get_soil_moisture <-
         )
       }
 
-      for (g in 1:length(JW_02_files)) {
+      for (g in seq_len(JW_02_files)) {
         readr::write_csv(
           as.data.frame(lapply(JW_02_files[[g]],
                                function(x)
@@ -212,7 +221,8 @@ get_soil_moisture <-
         names(soil_moisture_JW_02) <- c("V1", "V2", "V3", "Sensor")
       }
 
-      soil_moisture <- na.omit(rbind(soil_moisture_JW_01, soil_moisture_JW_02))
+      soil_moisture <- stats::na.omit(rbind(soil_moisture_JW_01,
+                                            soil_moisture_JW_02))
 
       names(soil_moisture) <-
         c("Date", "Time", "Moisture", "Sensor")
