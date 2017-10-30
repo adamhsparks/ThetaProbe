@@ -1,5 +1,4 @@
 
-
 #' @title Automated Cleaning of ThetaProbe Data
 #'
 #'@description This function checks for and removes outliers in the

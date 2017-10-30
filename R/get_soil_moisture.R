@@ -1,7 +1,7 @@
 
 #' @title Download, Clean and Generate Graphs From USQ ThetaProbe Data
 #'
-#'@description This package automates downloading and cleaning of soile moisture
+#'@description This package automates downloading and cleaning of soil moisture
 #' data from ThetaProbs.
 #'
 #'This is a slow process to retrieve all the files from the server for the first
@@ -9,10 +9,11 @@
 #'
 #' @param userpwd The login and password provided by NCEA to login via file
 #' transfer protocol (FTP)
-#' @param path Filepath to directory for saving a comma separated file (CSV)
+#' @param path File path to directory for saving a comma separated file (CSV)
 #' output.  Defaults to current working directory.
-#' @param local_dirs Filepath to directory, which holds previous data logger
-#' data monthly file folders, which contain hourly CSV files from loggers.
+#' @param local_dirs File path to directory, which holds previous data logger
+#' data monthly file folders, which contain hourly CSV files from theta
+#' probe loggers.
 #'
 #' @details This function will download CSV files from the server that
 #' are not currently on the local machine in the user specified location and
