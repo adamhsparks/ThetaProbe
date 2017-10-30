@@ -1,3 +1,4 @@
+
 #' @title Clean ThetaProbe data for outliers in five minute data and save a CSV file of daily data
 #'
 #'@description This function checks for and removes outliers in the
@@ -26,7 +27,9 @@ clean_theta_data <- function(csv_in = NULL) {
 
   # import data ----------------------------------------------------------------
   observations <- na.omit(as.data.frame(readr::read_csv(
-    csv_in, col_names = c("Date", "Time", "Moisture", "Probe")
+    csv_in,
+    col_names = c("Date", "Time", "Moisture", "Probe"),
+    col_types = c("ctdc")
   )))
 
   # reformate date column ------------------------------------------------------
