@@ -10,14 +10,15 @@ get_soil_moisture(userpwd = NULL, path = NULL, local_dirs = NULL)
 \item{userpwd}{The login and password provided by NCEA to login via file
 transfer protocol (FTP)}
 
-\item{path}{Filepath to directory for saving a comma separated file (CSV)
+\item{path}{File path to directory for saving a comma separated file (CSV)
 output.  Defaults to current working directory.}
 
-\item{local_dirs}{Filepath to directory, which holds previous data logger
-data monthly file folders, which contain hourly CSV files from loggers.}
+\item{local_dirs}{File path to directory, which holds previous data logger
+data monthly file folders, which contain hourly CSV files from theta
+probe loggers.}
 }
 \description{
-This package automates downloading and cleaning of soile moisture
+This package automates downloading and cleaning of soil moisture
 data from ThetaProbs.
 
 This is a slow process to retrieve all the files from the server for the first
