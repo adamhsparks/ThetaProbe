@@ -10,14 +10,14 @@
   "codeRepository": "https://github.com/adamhsparks/ThetaProbe.git",
   "issueTracker": "https://github.com/adamhsparks/ThetaProbe/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.4.1",
+    "version": "3.4.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.4.1 (2017-06-30)",
+  "runtimePlatform": "R version 3.4.2 (2017-09-28)",
   "author": [
     {
       "@type": "Person",
@@ -127,7 +127,7 @@
   ],
   "contIntegration": "https://travis-ci.org/adamhsparks/ThetaProbe",
   "readme": "https://github.com/adamhsparks/ThetaProbe.git/blob/master/README.md",
-  "fileSize": "4.718KB",
+  "fileSize": "4.862KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -141,5 +141,6 @@
       "name": "{ThetaProbe}: Download, Clean and Generate a Single Data File From USQ Theta Probe Soil Moisture Data",
       "url": "https://github.com/adamhsparks/ThetaProbe"
     }
-  ]
+  ],
+  "releaseNotes": "https://github.com/adamhsparks/ThetaProbe.git/blob/master/NEWS.md"
 }
