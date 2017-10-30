@@ -127,7 +127,7 @@
   ],
   "contIntegration": "https://travis-ci.org/adamhsparks/ThetaProbe",
   "readme": "https://github.com/adamhsparks/ThetaProbe.git/blob/master/README.md",
-  "fileSize": "4.862KB",
+  "fileSize": "4.866KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -142,5 +142,12 @@
       "url": "https://github.com/adamhsparks/ThetaProbe"
     }
   ],
-  "releaseNotes": "https://github.com/adamhsparks/ThetaProbe.git/blob/master/NEWS.md"
+  "releaseNotes": "https://github.com/adamhsparks/ThetaProbe.git/blob/master/NEWS.md",
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Robert",
+      "familyName": "Hijmans"
+    }
+  ]
 }
