@@ -34,7 +34,30 @@
     "email": "adamhsparks@gmail.com",
     "@id": "https://orcid.org/0000-0002-0061-8359"
   },
-  "softwareSuggestions": [],
+  "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "knitr",
+      "name": "knitr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rmarkdown",
+      "name": "rmarkdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    }
+  ],
   "softwareRequirements": [
     {
       "@type": "SoftwareApplication",
@@ -127,7 +150,7 @@
   ],
   "contIntegration": "https://travis-ci.org/adamhsparks/ThetaProbe",
   "readme": "https://github.com/adamhsparks/ThetaProbe.git/blob/master/README.md",
-  "fileSize": "4.866KB",
+  "fileSize": "6.509KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
