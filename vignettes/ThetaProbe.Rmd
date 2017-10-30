@@ -105,7 +105,7 @@ soil <-
 ### Graph data
 
 Create a graph of the data and store it in a shared location. This makes use of
-the [_theme.usq_]("https://github.com/adamhsparks/theme_usq") package to apply USQ colours and typography to the graphic.
+the _theme.usq_ package to apply USQ colours and typography to the graphic.
 
 ```{r graph_data, eval=FALSE}
 theta_graph <-
