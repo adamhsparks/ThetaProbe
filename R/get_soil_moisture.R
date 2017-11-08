@@ -62,7 +62,7 @@ get_soil_moisture <-
     # what is the most up to date directory that exists (month)?
     latest_dir <- max(local_dirs)
     # what files for that month are present locally?
-    latest_files <- list.files(paste0(path, "/", latest_dir))
+    latest_files <- list.files(file.path(path, latest_dir))
 
     ftp_site <-
       paste0("ftp://",
@@ -143,7 +143,7 @@ get_soil_moisture <-
       names(JW_01_files) <- JW_01
       names(JW_02_files) <- JW_02
 
-      for (f in seq_len(JW_01_files)) {
+      for (f in seq_along(JW_01_files)) {
         readr::write_csv(
           as.data.frame(lapply(JW_01_files[[f]],
                                function(x)
@@ -154,7 +154,7 @@ get_soil_moisture <-
         )
       }
 
-      for (g in seq_len(JW_02_files)) {
+      for (g in seq_along(JW_02_files)) {
         readr::write_csv(
           as.data.frame(lapply(JW_02_files[[g]],
                                function(x)
