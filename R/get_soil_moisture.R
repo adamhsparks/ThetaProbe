@@ -1,4 +1,7 @@
 
+
+
+
 #' @title Download, Clean and Generate Graphs From USQ ThetaProbe Data
 #'
 #'@description This package automates downloading and cleaning of soil moisture
@@ -124,21 +127,15 @@ get_soil_moisture <-
 
       JW_01_files <- sapply(paste0(remote, JW_01),
                             function(x)
-                              try(RCurl::getURL(x, curl = con))
-      )
+                              try(RCurl::getURL(x, curl = con)))
       JW_02_files <- sapply(paste0(remote, JW_02),
                             function(x)
-                              try(RCurl::getURL(x, curl = con))
-      )
+                              try(RCurl::getURL(x, curl = con)))
 
       JW_01_files <-
-        lapply(
-          JW_01_files, data.frame, stringsAsFactors = FALSE
-        )
+        lapply(JW_01_files, data.frame, stringsAsFactors = FALSE)
       JW_02_files <-
-        lapply(
-          JW_02_files, data.frame, stringsAsFactors = FALSE
-        )
+        lapply(JW_02_files, data.frame, stringsAsFactors = FALSE)
 
       names(JW_01_files) <- JW_01
       names(JW_02_files) <- JW_02
@@ -168,62 +165,79 @@ get_soil_moisture <-
     # Loop in local directories after downloading new data files and -----------
     #  generate new CSV file
     for (l in local_dirs) {
-      JW_01 <- list.files(paste0(path, l),
+      JW_01 <- list.files(file.path(path, l),
                           pattern = "JW_01[[:graph:]]+Sensors.csv",
                           full.names = TRUE)
 
-      # check file sizes and discard those files with no data
-      info <- file.info(JW_01)
-      empty <- rownames(info[info$size < 40, ])
-      JW_01 <- JW_01[JW_01 %in% empty == FALSE]
+      if (length(JW_01) > 0) {
+        # check file sizes and discard those files with no data
+        info <- file.info(JW_01)
+        empty <- rownames(info[info$size < 40,])
+        JW_01 <- JW_01[JW_01 %in% empty == FALSE]
+
+        soil_moisture_JW_01 <- data.table::rbindlist(lapply(
+          JW_01,
+          data.table::fread,
+          header = FALSE,
+          select = c(1:3)
+        ))
+        if (nrow(soil_moisture_JW_01) >= 1) {
+          soil_moisture_JW_01$Sensor <- rep("JW_01",
+                                            length(soil_moisture_JW_01[, 1]))
+        } else {
+          soil_moisture_JW_01 <-
+            data.table::data.table(matrix(
+              c(NA, NA, NA, "JW_01"),
+              ncol = 4,
+              nrow = 1
+            ))
+          names(soil_moisture_JW_01) <-
+            c("V1", "V2", "V3", "Sensor")
+        }
+      }
+
 
       JW_02 <- list.files(paste0(path, l),
                           pattern = "JW_02[[:graph:]]+Sensors.csv",
                           full.names = TRUE)
 
-      # check file sizes and discard those files with no data
-      info <- file.info(JW_02)
-      empty <- rownames(info[info$size < 40, ])
-      JW_02 <- JW_02[JW_02 %in% empty == FALSE]
+      if (length(JW_02) > 0) {
+        # check file sizes and discard those files with no data
+        info <- file.info(JW_02)
+        empty <- rownames(info[info$size < 40,])
+        JW_02 <- JW_02[JW_02 %in% empty == FALSE]
 
-      soil_moisture_JW_01 <- data.table::rbindlist(lapply(
-        JW_01,
-        data.table::fread,
-        header = FALSE,
-        select = c(1:3)
-      ))
-      if (nrow(soil_moisture_JW_01) >= 1) {
-        soil_moisture_JW_01$Sensor <- rep("JW_01",
-                                          length(soil_moisture_JW_01[, 1]))
-      } else {
-        soil_moisture_JW_01 <-
-          data.table::data.table(matrix(c(NA, NA, NA, "JW_01"),
-                                        ncol = 4,
-                                        nrow = 1))
-        names(soil_moisture_JW_01) <- c("V1", "V2", "V3", "Sensor")
+        soil_moisture_JW_02 <- data.table::rbindlist(lapply(
+          JW_02,
+          data.table::fread,
+          header = FALSE,
+          select = c(1:3)
+        ))
+
+        if (nrow(soil_moisture_JW_02) >= 1) {
+          soil_moisture_JW_02$Sensor <- rep("JW_02",
+                                            length(soil_moisture_JW_02[, 1]))
+
+        } else {
+          soil_moisture_JW_02 <-
+            data.table::data.table(matrix(
+              c(NA, NA, NA, "JW_02"),
+              ncol = 4,
+              nrow = 1
+            ))
+          names(soil_moisture_JW_02) <-
+            c("V1", "V2", "V3", "Sensor")
+        }
       }
 
-      soil_moisture_JW_02 <- data.table::rbindlist(lapply(
-        JW_02,
-        data.table::fread,
-        header = FALSE,
-        select = c(1:3)
-      ))
-
-      if (nrow(soil_moisture_JW_02) >= 1) {
-        soil_moisture_JW_02$Sensor <- rep("JW_02",
-                                          length(soil_moisture_JW_02[, 1]))
-
-      } else {
-        soil_moisture_JW_02 <-
-          data.table::data.table(matrix(c(NA, NA, NA, "JW_02"),
-                                        ncol = 4,
-                                        nrow = 1))
-        names(soil_moisture_JW_02) <- c("V1", "V2", "V3", "Sensor")
-      }
-
-      soil_moisture <- stats::na.omit(rbind(soil_moisture_JW_01,
-                                            soil_moisture_JW_02))
+      if (length(JW_01) > 0 & length(JW_02) > 0) {
+        soil_moisture <- stats::na.omit(rbind(soil_moisture_JW_01,
+                                              soil_moisture_JW_02))
+      } else
+        if (length(JW_01) > 0 & length(JW_02) < 0) {
+          soil_moisture <- stats::na.omit(soil_moisture_JW_01)
+        } else
+          soil_moisture <- soil_moisture_JW_02
 
       names(soil_moisture) <-
         c("Date", "Time", "Moisture", "Sensor")
@@ -235,7 +249,6 @@ get_soil_moisture <-
       JW_02 <- NULL
     }
     }
-
 
 #' @noRd
 # shamelessly borrowed from RJ Hijmans Raster package
