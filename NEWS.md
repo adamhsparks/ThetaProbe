@@ -1,3 +1,14 @@
+# ThetaProbe 1.0.3 (2017-11-8)
+
+### Bug fixes
+
+- Fix bugs where the complete CSV data file was not generated after fetching
+data from the server due to incorrect handling of only one probe logging
+
+### Minor enhancements
+
+- Use `file.path()` rather than `paste()`
+
 # ThetaProbe 1.0.2
 
 * Added a `NEWS.md` file to track changes to the package.
