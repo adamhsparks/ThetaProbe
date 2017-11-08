@@ -197,7 +197,7 @@ get_soil_moisture <-
       }
 
 
-      JW_02 <- list.files(paste0(path, l),
+      JW_02 <- list.files(file.path(path, l),
                           pattern = "JW_02[[:graph:]]+Sensors.csv",
                           full.names = TRUE)
 
