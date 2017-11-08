@@ -2,7 +2,6 @@ Package: ThetaProbe
 Type: Package
 Title: Download, Clean and Generate a Single Data File From USQ Theta Probe Soil Moisture Data
 Version: 1.0.2
-Date: 2017-10-30
 Authors@R: c(person("Adam", "Sparks", role = c("aut", "cre"),
     email = "adamhsparks@gmail.com",
     comment = "https://orcid.org/0000-0002-0061-8359"),
