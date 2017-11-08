@@ -66,7 +66,7 @@
       <h1>ThetaProbe</h1>
                         <h4 class="author">Adam H. Sparks</h4>
             
-            <h4 class="date">2017-10-30</h4>
+            <h4 class="date">2017-11-08</h4>
           </div>
 
     
@@ -96,13 +96,13 @@
 <div id="using-get_soil_moisture-to-download-new-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-get_soil_moisture-to-download-new-data" class="anchor"></a>Using get_soil_moisture() to download new data</h2>
-<p>This function, <code><a href="../reference/get_soil_moisture.html">get_soil_moisture()</a></code>, downloads data from the FTP server. The theta probe logger files are made up of several disjoint files that this function will concatenate with any prior data files available locally to create a single master file of the data for cleaning and analysis.</p>
+<p>This function, <code><a href="http://www.rdocumentation.org/packages/ThetaProbe/topics/get_soil_moisture">get_soil_moisture()</a></code>, downloads data from the FTP server. The theta probe logger files are made up of several disjoint files that this function will concatenate with any prior data files available locally to create a single master file of the data for cleaning and analysis.</p>
 <ul>
 <li><p><code>userpwd</code>: provide a valid user name and password to access the FTP server</p></li>
 <li><p><code>path</code>: File path to directory for saving a comma separated file (CSV) #’ output. Defaults to current working directory.</p></li>
 <li><p><code>local_dirs</code>: File path to directory, which holds previous data logger data monthly file folders, which contain hourly CSV files from theta probe loggers.</p></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/get_soil_moisture.html">get_soil_moisture</a></span>(<span class="dt">userpwd =</span> <span class="st">""</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/ThetaProbe/topics/get_soil_moisture">get_soil_moisture</a></span>(<span class="dt">userpwd =</span> <span class="st">""</span>,
                   <span class="dt">path =</span> <span class="st">"~/Documents/Data/Theta Probe/"</span>,
                   <span class="dt">local_dirs =</span> <span class="st">"~/Documents/Data/Theta Probe/"</span>)</code></pre></div>
 </div>
@@ -110,7 +110,7 @@
 <h2 class="hasAnchor">
 <a href="#using-clean_theta_data-to-remove-outliers-in-the-data" class="anchor"></a>Using clean_theta_data() to remove outliers in the data</h2>
 <p>Use a Hampel filter to remove outliers before summarising five-minute data into daily values.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">soil &lt;-<span class="st"> </span><span class="kw"><a href="../reference/clean_theta_data.html">clean_theta_data</a></span>(<span class="dt">csv_in =</span> <span class="kw">paste0</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">soil &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ThetaProbe/topics/clean_theta_data">clean_theta_data</a></span>(<span class="dt">csv_in =</span> <span class="kw">paste0</span>(
   <span class="st">"~/Documents/Data/Theta Probe/"</span>,
   <span class="kw">Sys.Date</span>(),
   <span class="st">"_Soil_Moisture.csv"</span>
