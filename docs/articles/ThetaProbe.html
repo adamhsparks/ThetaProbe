@@ -66,7 +66,7 @@
       <h1>ThetaProbe</h1>
                         <h4 class="author">Adam H. Sparks</h4>
             
-            <h4 class="date">2017-11-08</h4>
+            <h4 class="date">2017-12-13</h4>
           </div>
 
     
@@ -76,22 +76,22 @@
 <div id="load-libraries-for-use-in-r-session" class="section level2">
 <h2 class="hasAnchor">
 <a href="#load-libraries-for-use-in-r-session" class="anchor"></a>Load libraries for use in R session</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ThetaProbe)
-<span class="kw">library</span>(ggplot2)
-<span class="kw">library</span>(scales)
-<span class="kw">library</span>(readr)
-<span class="kw">library</span>(theme.usq)</code></pre></div>
+<pre class="sourceCode r" id="cb1"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(ThetaProbe)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(scales)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(readr)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">library</span>(theme.usq)</a></code></pre>
 </div>
 <div id="using-get_os-to-set-the-filepaths" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-get_os-to-set-the-filepaths" class="anchor"></a>Using get_os() to set the filepaths</h2>
 <p>Check the operating system first to see what platform R is running on. Set the output file path appropriately.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(get_os <span class="op">==</span><span class="st"> "windows"</span>) {
-  file_path &lt;-<span class="st"> "J:/Summer\ Pathology/Jo\ White/Theta\ Probe\ Files/"</span>
-} <span class="cf">else</span> <span class="co"># macOS, so</span>
-  file_path &lt;-
-<span class="st">  "/Volumes/centreforcrophealth/Summer\ Pathology/Jo\ White/Theta\ Probe\ Files/"</span>
-<span class="er">}</span></code></pre></div>
+<pre class="sourceCode r" id="cb2"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="cf">if</span>(get_os <span class="op">==</span><span class="st"> "windows"</span>) {</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  file_path &lt;-<span class="st"> "J:/Summer\ Pathology/Jo\ White/Theta\ Probe\ Files/"</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">} <span class="cf">else</span> <span class="co"># macOS, so</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">  file_path &lt;-</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="st">  "/Volumes/centreforcrophealth/Summer\ Pathology/Jo\ White/Theta\ Probe\ Files/"</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="er">}</span></a></code></pre>
 </div>
 <div id="using-get_soil_moisture-to-download-new-data" class="section level2">
 <h2 class="hasAnchor">
@@ -102,19 +102,19 @@
 <li><p><code>path</code>: File path to directory for saving a comma separated file (CSV) #’ output. Defaults to current working directory.</p></li>
 <li><p><code>local_dirs</code>: File path to directory, which holds previous data logger data monthly file folders, which contain hourly CSV files from theta probe loggers.</p></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/ThetaProbe/topics/get_soil_moisture">get_soil_moisture</a></span>(<span class="dt">userpwd =</span> <span class="st">""</span>,
-                  <span class="dt">path =</span> <span class="st">"~/Documents/Data/Theta Probe/"</span>,
-                  <span class="dt">local_dirs =</span> <span class="st">"~/Documents/Data/Theta Probe/"</span>)</code></pre></div>
+<pre class="sourceCode r" id="cb3"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="http://www.rdocumentation.org/packages/ThetaProbe/topics/get_soil_moisture">get_soil_moisture</a></span>(<span class="dt">userpwd =</span> <span class="st">""</span>,</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">                  <span class="dt">path =</span> <span class="st">"~/Documents/Data/Theta Probe/"</span>,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">                  <span class="dt">local_dirs =</span> <span class="st">"~/Documents/Data/Theta Probe/"</span>)</a></code></pre>
 </div>
 <div id="using-clean_theta_data-to-remove-outliers-in-the-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-clean_theta_data-to-remove-outliers-in-the-data" class="anchor"></a>Using clean_theta_data() to remove outliers in the data</h2>
 <p>Use a Hampel filter to remove outliers before summarising five-minute data into daily values.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">soil &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ThetaProbe/topics/clean_theta_data">clean_theta_data</a></span>(<span class="dt">csv_in =</span> <span class="kw">paste0</span>(
-  <span class="st">"~/Documents/Data/Theta Probe/"</span>,
-  <span class="kw">Sys.Date</span>(),
-  <span class="st">"_Soil_Moisture.csv"</span>
-))</code></pre></div>
+<pre class="sourceCode r" id="cb4"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">soil &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ThetaProbe/topics/clean_theta_data">clean_theta_data</a></span>(<span class="dt">csv_in =</span> <span class="kw">paste0</span>(</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="st">"~/Documents/Data/Theta Probe/"</span>,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="kw">Sys.Date</span>(),</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="st">"_Soil_Moisture.csv"</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">))</a></code></pre>
 </div>
 <div id="final-formatting-and-graphing" class="section level2">
 <h2 class="hasAnchor">
@@ -123,16 +123,16 @@
 <h3 class="hasAnchor">
 <a href="#name-probes-in-data-file" class="anchor"></a>Name probes in data file</h3>
 <p>The soil probes are referred to as “JW_01” and “JW_02” in the logger files. In this step we will assign the location names in the final file for analysis.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">soil<span class="op">$</span>Probe[soil<span class="op">$</span>Probe <span class="op">==</span><span class="st"> "JW_01"</span>] &lt;-<span class="st"> "Hermitage"</span>
-soil<span class="op">$</span>Probe[soil<span class="op">$</span>Probe <span class="op">==</span><span class="st"> "JW_02"</span>] &lt;-<span class="st"> "Kingaroy"</span></code></pre></div>
+<pre class="sourceCode r" id="cb5"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">soil<span class="op">$</span>Probe[soil<span class="op">$</span>Probe <span class="op">==</span><span class="st"> "JW_01"</span>] &lt;-<span class="st"> "Hermitage"</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">soil<span class="op">$</span>Probe[soil<span class="op">$</span>Probe <span class="op">==</span><span class="st"> "JW_02"</span>] &lt;-<span class="st"> "Kingaroy"</span></a></code></pre>
 </div>
 <div id="clean-up-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#clean-up-data" class="anchor"></a>Clean up data</h3>
 <p>The Hermitage probe was reactivated while in storage and transmitted values. This step removes them from the final data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">soil &lt;-
-<span class="st">  </span>soil[<span class="kw">which</span>(soil<span class="op">$</span>Probe <span class="op">!=</span><span class="st"> "Hermitage"</span> <span class="op">|</span>
-<span class="st">               </span>soil<span class="op">$</span>Date <span class="op">&lt;</span><span class="st"> "2017-08-15"</span>), ]</code></pre></div>
+<pre class="sourceCode r" id="cb6"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">soil &lt;-</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span>soil[<span class="kw">which</span>(soil<span class="op">$</span>Probe <span class="op">!=</span><span class="st"> "Hermitage"</span> <span class="op">|</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">               </span>soil<span class="op">$</span>Date <span class="op">&lt;</span><span class="st"> "2017-08-15"</span>), ]</a></code></pre>
 </div>
 </div>
 <div id="final-steps-graphing-and-saving-data" class="section level2">
@@ -142,25 +142,25 @@ soil<span class="op">$</span>Probe[soil<span class="op">$</span>Probe <span clas
 <h3 class="hasAnchor">
 <a href="#graph-data" class="anchor"></a>Graph data</h3>
 <p>Create a graph of the data and store it in a shared location. This makes use of the <em>theme.usq</em> package to apply USQ colours and typography to the graphic.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">theta_graph &lt;-
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(soil, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Moisture, <span class="dt">colour =</span> Probe)) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_manual">scale_colour_manual</a></span>(<span class="dt">values =</span> usq_palette[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)]) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ylab</a></span>(<span class="st">"Soil Moisture (%)"</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/facet_grid">facet_grid</a></span>(Probe <span class="op">~</span><span class="st"> </span>.) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/theme.usq/topics/theme_usq">theme_usq</a></span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>)
-
-<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggsave">ggsave</a></span>(<span class="kw">paste0</span>(<span class="st">"/Daily_Soil_Moisture_Graph_"</span>, <span class="kw">Sys.Date</span>(), <span class="st">".png"</span>),
-       theta_graph,
-       <span class="dt">path =</span> file_path)</code></pre></div>
+<pre class="sourceCode r" id="cb7"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">theta_graph &lt;-</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(soil, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Moisture, <span class="dt">colour =</span> Probe)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_manual">scale_colour_manual</a></span>(<span class="dt">values =</span> usq_palette[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)]) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ylab</a></span>(<span class="st">"Soil Moisture (%)"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/facet_grid">facet_grid</a></span>(Probe <span class="op">~</span><span class="st"> </span>.) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/theme.usq/topics/theme_usq">theme_usq</a></span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>)</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggsave">ggsave</a></span>(<span class="kw">paste0</span>(<span class="st">"/Daily_Soil_Moisture_Graph_"</span>, <span class="kw">Sys.Date</span>(), <span class="st">".png"</span>),</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">       theta_graph,</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">       <span class="dt">path =</span> file_path)</a></code></pre>
 </div>
 <div id="save-the-cleaned-master-csv-file" class="section level3">
 <h3 class="hasAnchor">
 <a href="#save-the-cleaned-master-csv-file" class="anchor"></a>Save the cleaned master CSV file</h3>
 <p>Save data to disk in a shared location.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/readr/topics/write_delim">write_csv</a></span>(soil,
-          <span class="kw">paste0</span>(file_path, <span class="st">"Daily_Soil_Moisture_Data_"</span>, <span class="kw">Sys.Date</span>(), <span class="st">".csv"</span>))</code></pre></div>
+<pre class="sourceCode r" id="cb8"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="http://www.rdocumentation.org/packages/readr/topics/write_delim">write_csv</a></span>(soil,</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">          <span class="kw">paste0</span>(file_path, <span class="st">"Daily_Soil_Moisture_Data_"</span>, <span class="kw">Sys.Date</span>(), <span class="st">".csv"</span>))</a></code></pre>
 </div>
 </div>
 </div>
