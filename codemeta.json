@@ -14,10 +14,10 @@
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.4.2",
+    "version": "3.4.3",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.4.2 (2017-09-28)",
+  "runtimePlatform": "R version 3.4.3 (2017-11-30)",
   "author": [
     {
       "@type": "Person",
@@ -150,7 +150,7 @@
   ],
   "contIntegration": "https://travis-ci.org/adamhsparks/ThetaProbe",
   "readme": "https://github.com/adamhsparks/ThetaProbe.git/blob/master/README.md",
-  "fileSize": "6.678KB",
+  "fileSize": "6.67KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
