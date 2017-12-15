@@ -23,16 +23,14 @@
       "@type": "Person",
       "givenName": "Adam",
       "familyName": "Sparks",
-      "email": "adamhsparks@gmail.com",
-      "@id": "https://orcid.org/0000-0002-0061-8359"
+      "email": "adamhsparks@gmail.com"
     }
   ],
   "maintainer": {
     "@type": "Person",
     "givenName": "Adam",
     "familyName": "Sparks",
-    "email": "adamhsparks@gmail.com",
-    "@id": "https://orcid.org/0000-0002-0061-8359"
+    "email": "adamhsparks@gmail.com"
   },
   "softwareSuggestions": [
     {
@@ -150,7 +148,7 @@
   ],
   "contIntegration": "https://travis-ci.org/adamhsparks/ThetaProbe",
   "readme": "https://github.com/adamhsparks/ThetaProbe.git/blob/master/README.md",
-  "fileSize": "6.67KB",
+  "fileSize": "6.755KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
