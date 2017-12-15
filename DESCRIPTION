@@ -4,7 +4,7 @@ Title: Download, Clean and Generate a Single Data File From USQ Theta Probe Soil
 Version: 1.0.3
 Authors@R: c(person("Adam", "Sparks", role = c("aut", "cre"),
     email = "adamhsparks@gmail.com",
-    comment = "ORCID = 0000-0002-0061-8359"),
+    comment = (ORCID = "0000-0002-0061-8359")),
     person("Robert", "Hijmans", role = c("ctb")))
 Maintainer: Adam H Sparks, <adamhsparks@gmail.com>
 URL: https://github.com/adamhsparks/ThetaProbe
