@@ -1,7 +1,4 @@
 
-
-
-
 #' @title Download, Clean and Generate Graphs From USQ ThetaProbe Data
 #'
 #'@description This package automates downloading and cleaning of soil moisture
