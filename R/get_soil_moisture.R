@@ -62,7 +62,8 @@ get_soil_moisture <-
     # what is the most up to date directory that exists (month)?
     latest_dir <- max(local_dirs)
     # what files for that month are present locally?
-    latest_files <- list.files(file.path(path, latest_dir))
+    latest_files <- list.files(path = file.path(path, latest_dir),
+                               pattern = ".csv$")
 
     ftp_site <-
       paste0("ftp://",

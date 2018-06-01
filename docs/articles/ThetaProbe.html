@@ -18,7 +18,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -27,8 +27,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">ThetaProbe</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">ThetaProbe</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -38,13 +42,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/ThetaProbe.html">Get Started</a>
+  <a href="../articles/ThetaProbe.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -64,17 +68,20 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>ThetaProbe</h1>
                         <h4 class="author">Adam H. Sparks</h4>
             
-            <h4 class="date">2018-03-12</h4>
-          </div>
+            <h4 class="date">2018-06-01</h4>
+      
+      <small class="dont-index">Source: <a href="https://github.com/adamhsparks/ThetaProbe/blob/master/vignettes/ThetaProbe.Rmd"><code>vignettes/ThetaProbe.Rmd</code></a></small>
+      <div class="hidden name"><code>ThetaProbe.Rmd</code></div>
+
+    </div>
 
     
     
-<div class="contents">
 <p>An R package for internal use to retrieve files from the University of Southern Queensland’s NCEA soil probe FTP file server for the Centre for Crop Health’s Summer Crops Pathology group and collate all files while converting five-minute data into daily values and filtering outliers in the five-minute data before generating daily mean values for analysis and graphing.</p>
 <div id="load-libraries-for-use-in-r-session" class="section level2">
 <h2 class="hasAnchor">
@@ -99,13 +106,13 @@
 <div id="using-get_soil_moisture-to-download-new-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-get_soil_moisture-to-download-new-data" class="anchor"></a>Using get_soil_moisture() to download new data</h2>
-<p>This function, <code><a href="../reference/get_soil_moisture.html">get_soil_moisture()</a></code>, downloads data from the FTP server. The theta probe logger files are made up of several disjoint files that this function will concatenate with any prior data files available locally to create a single master file of the data for cleaning and analysis.</p>
+<p>This function, <code><a href="http://www.rdocumentation.org/packages/ThetaProbe/topics/get_soil_moisture">get_soil_moisture()</a></code>, downloads data from the FTP server. The theta probe logger files are made up of several disjoint files that this function will concatenate with any prior data files available locally to create a single master file of the data for cleaning and analysis.</p>
 <ul>
 <li><p><code>userpwd</code>: provide a valid user name and password to access the FTP server</p></li>
 <li><p><code>path</code>: File path to directory for saving a comma separated file (CSV) #’ output. Defaults to current working directory.</p></li>
 <li><p><code>local_dirs</code>: File path to directory, which holds previous data logger data monthly file folders, which contain hourly CSV files from theta probe loggers.</p></li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="../reference/get_soil_moisture.html">get_soil_moisture</a></span>(<span class="dt">userpwd =</span> <span class="st">""</span>,</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="http://www.rdocumentation.org/packages/ThetaProbe/topics/get_soil_moisture">get_soil_moisture</a></span>(<span class="dt">userpwd =</span> <span class="st">""</span>,</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">                  <span class="dt">path =</span> <span class="st">"~/Documents/Data/Theta Probe/"</span>,</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">                  <span class="dt">local_dirs =</span> <span class="st">"~/Documents/Data/Theta Probe/"</span>)</a></code></pre></div>
 </div>
@@ -113,7 +120,7 @@
 <h2 class="hasAnchor">
 <a href="#using-clean_theta_data-to-remove-outliers-in-the-data" class="anchor"></a>Using clean_theta_data() to remove outliers in the data</h2>
 <p>Use a Hampel filter to remove outliers before summarising five-minute data into daily values.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">soil &lt;-<span class="st"> </span><span class="kw"><a href="../reference/clean_theta_data.html">clean_theta_data</a></span>(<span class="dt">csv_in =</span> <span class="kw">paste0</span>(</a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">soil &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ThetaProbe/topics/clean_theta_data">clean_theta_data</a></span>(<span class="dt">csv_in =</span> <span class="kw">paste0</span>(</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="st">"~/Documents/Data/Theta Probe/"</span>,</a>
 <a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="kw">Sys.Date</span>(),</a>
 <a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="st">"_Soil_Moisture.csv"</span></a>
@@ -151,7 +158,7 @@
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_manual">scale_colour_manual</a></span>(<span class="dt">values =</span> usq_palette[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)]) <span class="op">+</span></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ylab</a></span>(<span class="st">"Soil Moisture (%)"</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/facet_grid">facet_grid</a></span>(Probe <span class="op">~</span><span class="st"> </span>.) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/theme.usq/topics/theme_usq">theme_usq</a></span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="st">  </span><span class="kw">theme_usq</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb7-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>)</a>
 <a class="sourceLine" id="cb7-9" data-line-number="9"></a>
 <a class="sourceLine" id="cb7-10" data-line-number="10"><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggsave">ggsave</a></span>(<span class="kw">paste0</span>(<span class="st">"/Daily_Soil_Moisture_Graph_"</span>, <span class="kw">Sys.Date</span>(), <span class="st">".png"</span>),</a>
@@ -164,7 +171,6 @@
 <p>Save data to disk in a shared location.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="http://www.rdocumentation.org/packages/readr/topics/write_delim">write_csv</a></span>(soil,</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">          <span class="kw">paste0</span>(file_path, <span class="st">"Daily_Soil_Moisture_Data_"</span>, <span class="kw">Sys.Date</span>(), <span class="st">".csv"</span>))</a></code></pre></div>
-</div>
 </div>
 </div>
   </div>
@@ -197,6 +203,8 @@
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>
