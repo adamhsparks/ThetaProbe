@@ -1,3 +1,6 @@
+ThetaProbe 1.0.3 (2019-09-18)
+This package has been retired and is no longer being developed or maintained.
+
 # ThetaProbe 1.0.3 (2017-11-8)
 
 ### Bug fixes
