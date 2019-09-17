@@ -23,8 +23,9 @@ Imports:
     readr,
     RCurl,
     utils
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 ByteCompile: TRUE
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
+Encoding: UTF-8
