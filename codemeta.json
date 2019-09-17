@@ -14,10 +14,10 @@
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.0",
+    "version": "3.6.1",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.0 (2018-04-23)",
+  "runtimePlatform": "R version 3.6.1 (2019-07-05)",
   "author": [
     {
       "@type": "Person",
@@ -161,7 +161,7 @@
   ],
   "contIntegration": "https://travis-ci.org/adamhsparks/ThetaProbe",
   "readme": "https://github.com/adamhsparks/ThetaProbe/blob/master/README.md",
-  "fileSize": "6.919KB",
+  "fileSize": "6.863KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -188,5 +188,13 @@
     }
   ],
   "developmentStatus": "http://www.repostatus.org/#inactive",
-  "keywords": ["r", "hampel-filter", "soil-moisture", "probe-data", "outlier-detection"]
+  "keywords": [
+    "r",
+    "hampel-filter",
+    "soil-moisture",
+    "probe-data",
+    "outlier-detection"
+  ],
+  "copyrightHolder": {},
+  "funder": {}
 }
